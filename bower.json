@@ -1,0 +1,19 @@
+{
+  "name": "foes-scrollproxy",
+  "description": "",
+  "main": "dist/foes-scrollproxy.js",
+  "authors": [
+    {
+      "name": "Mikel Tuesta",
+      "email": "mikeltuesta@gmail.com",
+      "homepage": "http://mikeltuesta.com"
+    }
+  ],
+  "license": "MIT",
+  "keywords": [
+    "foes",
+    "scroll",
+    "scroll-proxy"
+  ],
+  "homepage": "https://github.com/FriendsOfECMAScript/ScrollProxy"
+}
