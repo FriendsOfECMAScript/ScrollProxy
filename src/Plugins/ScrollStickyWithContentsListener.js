@@ -68,7 +68,7 @@
         stickyTranslate = absContainerOffsetTop >= this.maxStickyTranslate ? this.maxStickyTranslate : absContainerOffsetTop;
 
         if (stickyTranslate === this.maxStickyTranslate) {
-          TweenLite.set(this.$sticky, { position: 'absolute', top: this.maxStickyTranslate + this.stickyTopOffset, left: '' });
+          TweenLite.set(this.$sticky, { position: 'absolute', top: this.maxStickyTranslate, left: '' });
         } else {
           var top = 0;
           if (stickyExceedsViewport) {
