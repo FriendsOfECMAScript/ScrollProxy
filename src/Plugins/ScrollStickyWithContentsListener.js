@@ -44,6 +44,8 @@
     this.stickyRect = {};
 
     this.init = function() {
+      this.reset();
+
       this.latestKnownScrollY = window.pageYOffset;
 
       this.containerHeight = this.$container.height();
@@ -105,7 +107,6 @@
     };
 
     this.reset = function() {
-//       TweenLite.killTweensOf(this.$sticky);
       TweenLite.set(this.$sticky, { clearProps: 'all' });
     };
   }
