@@ -12,15 +12,15 @@
 
   var defaultBreakpoints = [640, 860, 1024, 1280];
 
-  function ScrollImageParallaxListener ($images, breakpoints) {
+  function ScrollImageParallaxListener ($images, scale, direction, breakpoints) {
     ScrollProxyListener.call(this);
 
     this.breakpoints = typeof breakpoints !== 'undefined' ? breakpoints : defaultBreakpoints;
     this.currentBreakpoint = -1;
     this.windowWidth = -1;
 
-    this.direction = -1;
-    this.scale = 1.2;
+    this.direction = direction;
+    this.scale = scale;
 
     this.$images = $images;
     this.imagesHeights = [];
@@ -77,6 +77,11 @@
     this.init();
   }
   ScrollImageParallaxListener.prototype = Object.create( ScrollProxyListener.prototype );
+
+  ScrollImageParallaxListener.DIRECTION = {
+    POSITIVE: 1,
+    NEGATIVE: -1
+  };
 
   // Expose ScrollImageParallaxListener
   window.ScrollImageParallaxListener = ScrollImageParallaxListener;

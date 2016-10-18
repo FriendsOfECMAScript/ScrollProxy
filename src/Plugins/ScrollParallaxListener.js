@@ -10,10 +10,10 @@
  */
 (function(window, DomHelpers, ScrollProxyListener, $, TweenLite){
 
-  function ScrollParallaxListener ($texts, maxTranslate) {
+  function ScrollParallaxListener ($texts, direction, maxTranslate) {
     ScrollProxyListener.call(this);
 
-    this.direction = -1;
+    this.direction = direction;
     this.maxTranslate = maxTranslate;
 
     this.$texts = $texts;
@@ -31,6 +31,10 @@
   }
   ScrollParallaxListener.prototype = Object.create( ScrollProxyListener.prototype );
 
+  ScrollParallaxListener.DIRECTION = {
+    POSITIVE: 1,
+    NEGATIVE: -1
+  };
 
   // Expose ScrollParallaxListener
   window.ScrollParallaxListener = ScrollParallaxListener;
