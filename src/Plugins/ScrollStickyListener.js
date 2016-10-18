@@ -4,7 +4,7 @@
 'use strict';
 
 /**
- * Main page parallax animation. Implements ScrollProxyListener 'Interface'
+ * Generic Sticky element listener. Implements ScrollProxyListener 'Interface'
  *
  * @param $pageWrapper
  * @param $pageTitle
@@ -31,8 +31,11 @@
     this.triggerOffset = typeof triggerOffset !== 'undefined' ? triggerOffset : 0;
 
     this.init = function() {
+      this.reset();
+
       this.containerHeight = this.$container.height();
       this.stickyHeight = this.$sticky.height();
+      this.stickyWidth = this.$sticky.width();
 
       this.maxStickyTranslate = Math.max(this.containerHeight - this.stickyHeight - this.stickyTopOffset - this.stickyBottomOffset, 0);
       this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect.left);
@@ -49,7 +52,7 @@
         if (stickyTranslate === this.maxStickyTranslate) {
           TweenLite.set(this.$sticky, { position: 'absolute', top: this.maxStickyTranslate + this.stickyTopOffset, left: '' });
         } else {
-          TweenLite.set(this.$sticky, { position: 'fixed', top: this.stickyTopOffset, left: this.stickyOffsetLeft });
+          TweenLite.set(this.$sticky, { position: 'fixed', top: this.stickyTopOffset, left: this.stickyOffsetLeft, width: this.stickyWidth });
         }
       } else {
         TweenLite.set(this.$sticky, { clearProps: 'all' });

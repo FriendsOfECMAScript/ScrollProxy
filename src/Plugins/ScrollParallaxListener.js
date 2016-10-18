@@ -4,13 +4,13 @@
 'use strict';
 
 /**
- * Generic image parallax animation. Implements ScrollProxyListener 'Interface'
+ * Generic parallax animation. Implements ScrollProxyListener 'Interface'
  * @param $images
  * @constructor
  */
 (function(window, DomHelpers, ScrollProxyListener, $, TweenLite){
 
-  function ScrollTextParallaxListener ($texts, maxTranslate) {
+  function ScrollParallaxListener ($texts, maxTranslate) {
     ScrollProxyListener.call(this);
 
     this.direction = -1;
@@ -29,10 +29,10 @@
       }).bind(this))
     };
   }
-  ScrollTextParallaxListener.prototype = Object.create( ScrollProxyListener.prototype );
+  ScrollParallaxListener.prototype = Object.create( ScrollProxyListener.prototype );
 
 
-  // Expose ScrollTextParallaxListener
-  window.ScrollTextParallaxListener = ScrollTextParallaxListener;
+  // Expose ScrollParallaxListener
+  window.ScrollParallaxListener = ScrollParallaxListener;
 
 })(window, window.DomHelpers, window.ScrollProxyListener, jQuery, TweenLite);
