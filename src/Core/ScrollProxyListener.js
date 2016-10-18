@@ -1,5 +1,5 @@
 /*
- * @author Mikel Tuesta <mikel@lin3s.com>
+ * @author Mikel Tuesta <mikeltuesta@gmail.com>
  */
 'use strict';
 
@@ -19,7 +19,7 @@
 (function(window, DomHelpers, undefined) {
 
   function ScrollProxyListener() {
-    this.windowDimensions = DomHelpers.getWindowDimensions();
+    this.viewportSize = DomHelpers.getViewportSize();
     this.latestKnownScrollY = undefined;
     this.doFrame = function () {
 
@@ -27,8 +27,8 @@
     this.onScroll = function (latestKnownScrollY) {
       this.latestKnownScrollY = latestKnownScrollY;
     };
-    this.onResize = function (windowDimensions) {
-      this.windowDimensions = windowDimensions;
+    this.onResize = function (viewportSize) {
+      this.viewportSize = viewportSize;
     };
   }
 

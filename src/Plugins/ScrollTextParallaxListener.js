@@ -1,5 +1,5 @@
 /*
- * @author Mikel Tuesta <mikel@lin3s.com>
+ * @author Mikel Tuesta <mikeltuesta@gmail.com>
  */
 'use strict';
 
@@ -21,9 +21,9 @@
     this.doFrame = function() {
       this.$texts.each((function (index, el) {
         var $el = $(el);
-        var inViewportData = DomHelpers.getViewportData($el[0], this.windowDimensions.height);
+        var inViewportData = DomHelpers.getViewportData($el[0], this.viewportSize);
         if (inViewportData.isInViewport) {
-          var translate = this.direction * inViewportData.rect.top / this.windowDimensions.height * this.maxTranslate;
+          var translate = this.direction * inViewportData.rect.top / this.viewportSize.height * this.maxTranslate;
           TweenLite.to($el, .5, { y: translate });
         }
       }).bind(this))

@@ -1,5 +1,5 @@
 /*
- * @author Mikel Tuesta <mikel@lin3s.com>
+ * @author Mikel Tuesta <mikeltuesta@gmail.com>
  */
 'use strict';
 
@@ -16,10 +16,7 @@
     function ScrollProxy() {
       var latestKnownScrollY = window.pageYOffset,
         animating = false,
-        windowDimensions = {
-          height: -1,
-          width: -1
-        },
+        viewportSize = new DomHelpers.ViewportSize(-1, -1),
         listeners = [];
 
       var notifyListeners = function () {
@@ -45,8 +42,8 @@
         requestFrame();
       };
       var onResize = function () {
-        windowDimensions = DomHelpers.getWindowDimensions();
-        notifyListeners('onResize', windowDimensions);
+        viewportSize = DomHelpers.getViewportSize();
+        notifyListeners('onResize', viewportSize);
       };
       var bindListeners = function () {
         window.addEventListener('scroll', onScroll);
@@ -65,7 +62,7 @@
         }
       };
       var init = function () {
-        windowDimensions = DomHelpers.getWindowDimensions();
+        viewportSize = DomHelpers.getViewportSize();
         bindListeners();
       };
       init();

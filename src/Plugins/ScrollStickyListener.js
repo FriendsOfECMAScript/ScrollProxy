@@ -1,5 +1,5 @@
 /*
- * @author Mikel Tuesta <mikel@lin3s.com>
+ * @author Mikel Tuesta <mikeltuesta@gmail.com>
  */
 'use strict';
 
@@ -35,7 +35,7 @@
       this.stickyHeight = this.$sticky.height();
 
       this.maxStickyTranslate = Math.max(this.containerHeight - this.stickyHeight - this.stickyTopOffset - this.stickyBottomOffset, 0);
-      this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0)).rect.left);
+      this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect.left);
 
       this.onScroll();
       this.doFrame();
@@ -57,10 +57,11 @@
     };
 
     this.onScroll = function (latestKnownScrollY) {
-      this.containerOffsetTop = Math.floor(DomHelpers.getViewportData(this.$container.get(0)).rect.top);
+      this.containerOffsetTop = Math.floor(DomHelpers.getViewportData(this.$container.get(0), this.viewportSize).rect.top);
     };
 
-    this.onResize = function(windowDimensions) {
+    this.onResize = function(viewportSize) {
+      this.viewportSize = viewportSize;
       this.init();
     };
 

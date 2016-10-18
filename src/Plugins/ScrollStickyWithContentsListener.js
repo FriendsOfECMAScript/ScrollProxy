@@ -1,5 +1,5 @@
 /*
- * @author Mikel Tuesta <mikel@lin3s.com>
+ * @author Mikel Tuesta <mikeltuesta@gmail.com>
  */
 'use strict';
 
@@ -51,7 +51,7 @@
       this.stickyWidth = this.$sticky.parent().outerWidth();
 
       this.maxStickyTranslate = Math.max(this.containerHeight - this.stickyHeight - this.stickyTopOffset - this.stickyBottomOffset, 0);
-      this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0)).rect.left);
+      this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect.left);
 
       this.onScroll();
       this.doFrame();
@@ -59,11 +59,11 @@
 
     this.doFrame = function () {
       var stickyTranslate = 0,
-        stickyExceedsViewport = this.stickyHeight > this.windowDimensions.height;
+        stickyExceedsViewport = this.stickyHeight > this.viewportSize.height;
 
       if (this.containerOffsetTop - this.triggerOffset < 0) {
         var absContainerOffsetTop = Math.abs(this.containerOffsetTop),
-          maxStickyInnerTranslateY = this.stickyHeight - this.windowDimensions.height + this.stickyTopOffset + this.stickyBottomOffset,
+          maxStickyInnerTranslateY = this.stickyHeight - this.viewportSize.height + this.stickyTopOffset + this.stickyBottomOffset,
           currentStickyTop = this.stickyRect.top;
         stickyTranslate = absContainerOffsetTop >= this.maxStickyTranslate ? this.maxStickyTranslate : absContainerOffsetTop;
 
@@ -95,12 +95,12 @@
       this.latestKnownScrollYDelta = this.latestKnownScrollY - latestKnownScrollY;
       this.latestKnownScrollY = latestKnownScrollY;
 
-      this.stickyRect = DomHelpers.getViewportData(this.$sticky.get(0)).rect;
-      this.containerOffsetTop = Math.floor(DomHelpers.getViewportData(this.$container.get(0)).rect.top);
+      this.stickyRect = DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect;
+      this.containerOffsetTop = Math.floor(DomHelpers.getViewportData(this.$container.get(0), this.viewportSize).rect.top);
     };
 
-    this.onResize = function(windowDimensions) {
-      this.windowDimensions = windowDimensions;
+    this.onResize = function(viewportSize) {
+      this.viewportSize = viewportSize;
       this.init();
     };
 

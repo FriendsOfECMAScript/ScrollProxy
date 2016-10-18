@@ -1,5 +1,5 @@
 /*
- * @author Mikel Tuesta <mikel@lin3s.com>
+ * @author Mikel Tuesta <mikeltuesta@gmail.com>
  */
 'use strict';
 
@@ -38,19 +38,19 @@
     this.doFrame = function() {
       this.$images.each((function (index, el) {
         var $el = $(el);
-        var inViewportData = DomHelpers.getViewportData($el[0], this.windowDimensions.height);
+        var inViewportData = DomHelpers.getViewportData($el[0], this.viewportSize);
         if (inViewportData.isInViewport) {
           var maxTranslate = (this.scale - 1) * this.imagesHeights[index],
-            translate = this.direction * inViewportData.rect.top / this.windowDimensions.height * maxTranslate;
+            translate = this.direction * inViewportData.rect.top / this.viewportSize.height * maxTranslate;
           TweenLite.to($el, .5, { y: Math.floor(translate) });
         }
       }).bind(this));
     };
 
-    this.onResize = function(windowDimensions) {
-      this.windowDimensions = windowDimensions;
+    this.onResize = function(viewportSize) {
+      this.viewportSize = viewportSize;
       // Check breakpoint changed
-      var breakpoint = this.getNearestBreakpoint(this.windowDimensions.width);
+      var breakpoint = this.getNearestBreakpoint(this.viewportSize.width);
       if (this.currentBreakpoint !== breakpoint) {
         this.currentBreakpoint = breakpoint;
         this.init();
