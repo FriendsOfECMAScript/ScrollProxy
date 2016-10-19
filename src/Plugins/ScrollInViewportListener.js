@@ -37,14 +37,14 @@
 
     this.init = function() {
       this.onScroll();
-      this.doFrame();
+      this.render();
     };
 
     this.addElements = function($elements) {
       this.$elements = this.$elements.add($elements);
     };
 
-    this.doFrame = function () {
+    this.render = function () {
       this.$elements.each((function(index, element){
         var inViewportData = this.elementsViewportData[index];
         if (inViewportData.isInViewport && !inViewportData.wasInViewport) {
@@ -59,7 +59,7 @@
       }).bind(this));
     };
 
-    this.onScroll = function (latestKnownScrollY) {
+    this.onScroll = function (latestKnownScrollPosition) {
       this.$elements.each((function(index, element){
         var inViewportData = this.elementsViewportData[index],
           newInViewportData = DomHelpers.getViewportData(element, this.viewportSize),

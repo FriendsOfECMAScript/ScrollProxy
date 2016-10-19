@@ -20,13 +20,20 @@
 
   function ScrollProxyListener() {
     this.viewportSize = DomHelpers.getViewportSize();
-    this.latestKnownScrollY = undefined;
-    this.doFrame = function () {
+    this.latestKnownScrollPosition = undefined;
+
+    this.render = function () {
 
     };
-    this.onScroll = function (latestKnownScrollY) {
-      this.latestKnownScrollY = latestKnownScrollY;
+    /**
+     * @param latestKnownScrollPosition {GeometricHelpers.Position2D}
+     */
+    this.onScroll = function (latestKnownScrollPosition) {
+      this.latestKnownScrollPosition = latestKnownScrollPosition;
     };
+    /**
+     * @param viewportSize {GeometricHelpers.Dimension2D}
+     */
     this.onResize = function (viewportSize) {
       this.viewportSize = viewportSize;
     };

@@ -41,10 +41,10 @@
       this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect.left);
 
       this.onScroll();
-      this.doFrame();
+      this.render();
     };
 
-    this.doFrame = function () {
+    this.render = function () {
       var stickyTranslate = 0;
       if (this.containerOffsetTop - this.triggerOffset < 0) {
         var absContainerOffsetTop = Math.abs(this.containerOffsetTop);
@@ -59,7 +59,7 @@
       }
     };
 
-    this.onScroll = function (latestKnownScrollY) {
+    this.onScroll = function (latestKnownScrollPosition) {
       this.containerOffsetTop = Math.floor(DomHelpers.getViewportData(this.$container.get(0), this.viewportSize).rect.top);
     };
 

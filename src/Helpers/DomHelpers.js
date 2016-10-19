@@ -3,7 +3,7 @@
  */
 'use strict';
 
-(function () {
+(function (window, GeometricHelpers) {
 
   var DomHelpers = Object.create({});
 
@@ -16,7 +16,7 @@
 
   /**
    *
-   * @returns {ViewportSize}
+   * @returns {GeometricHelpers.Dimension2D}
    */
   DomHelpers.getViewportSize = function () {
     var w = window,
@@ -24,7 +24,7 @@
       e = d.documentElement,
       g = d.getElementsByTagName('body')[0];
 
-    return new DomHelpers.ViewportSize(
+    return new GeometricHelpers.Dimension2D(
       w.innerHeight || e.clientHeight || g.clientHeight,
       w.innerWidth || e.clientWidth || g.clientWidth
     );
@@ -33,7 +33,7 @@
   /**
    *
    * @param element
-   * @param viewportSize | Size object
+   * @param viewportSize {GeometricHelpers.Dimension2D}
    * @returns {{isInViewport: boolean, rect: ClientRect}}
    */
 
@@ -54,17 +54,13 @@
   };
 
   /**
-   *
-   * @param height
-   * @param width
-   * @constructor
+   * @returns {GeometricHelpers.Position2D}
    */
-  DomHelpers.ViewportSize = function(height, width) {
-    this.height = height;
-    this.width = width;
+  DomHelpers.getScrollPosition = function () {
+    return new GeometricHelpers.Position2D(window.pageXOffset, window.pageYOffset);
   };
 
   // Expose DomHelpers
   window.DomHelpers = DomHelpers;
 
-})();
+})(window, window.GeometricHelpers);

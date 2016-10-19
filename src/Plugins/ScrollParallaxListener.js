@@ -18,7 +18,7 @@
 
     this.$texts = $texts;
 
-    this.doFrame = function() {
+    this.render = function() {
       this.$texts.each((function (index, el) {
         var $el = $(el);
         var inViewportData = DomHelpers.getViewportData($el[0], this.viewportSize);

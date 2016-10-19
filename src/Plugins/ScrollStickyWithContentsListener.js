@@ -14,7 +14,7 @@
  *
  * @constructor
  */
-(function(window, DomHelpers, ScrollProxyListener, TweenLite) {
+(function(window, DomHelpers, ScrollProxyListener, TweenLite, undefined) {
 
   var SCROLL_DIRECTION = {
     UP: 'UP',
@@ -56,10 +56,10 @@
       this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect.left);
 
       this.onScroll();
-      this.doFrame();
+      this.render();
     };
 
-    this.doFrame = function () {
+    this.render = function () {
       var stickyTranslate = 0,
         stickyExceedsViewport = this.stickyHeight > this.viewportSize.height;
 
@@ -92,10 +92,14 @@
       }
     };
 
-    this.onScroll = function (latestKnownScrollY) {
-      this.scrollDirection = this.latestKnownScrollY > latestKnownScrollY ? SCROLL_DIRECTION.UP : SCROLL_DIRECTION.DOWN;
-      this.latestKnownScrollYDelta = this.latestKnownScrollY - latestKnownScrollY;
-      this.latestKnownScrollY = latestKnownScrollY;
+    this.onScroll = function (latestKnownScrollPosition) {
+      if (latestKnownScrollPosition === undefined) {
+        latestKnownScrollPosition = DomHelpers.getScrollPosition();
+      }
+
+      this.scrollDirection = this.latestKnownScrollY > latestKnownScrollPosition.y ? SCROLL_DIRECTION.UP : SCROLL_DIRECTION.DOWN;
+      this.latestKnownScrollYDelta = this.latestKnownScrollY - latestKnownScrollPosition.y;
+      this.latestKnownScrollY = latestKnownScrollPosition.y;
 
       this.stickyRect = DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect;
       this.containerOffsetTop = Math.floor(DomHelpers.getViewportData(this.$container.get(0), this.viewportSize).rect.top);

@@ -3,7 +3,7 @@
  */
 'use strict';
 
-(function (window, DomHelpers, ScrollProxyListener, _) {
+(function (window, GeometricHelpers, DomHelpers, ScrollProxyListener, _) {
 
   /**
    * ParallaxController - Singleton
@@ -14,10 +14,10 @@
     var instance;
 
     function ScrollProxy() {
-      var latestKnownScrollY = window.pageYOffset,
-        animating = false,
-        viewportSize = new DomHelpers.ViewportSize(-1, -1),
-        listeners = [];
+      var latestKnownScrollPosition = DomHelpers.getScrollPosition(),
+        viewportSize = DomHelpers.getViewportSize(),
+        listeners = [],
+        rendering = false;
 
       var notifyListeners = function () {
         var args = Array.prototype.slice.call(arguments),
@@ -27,18 +27,18 @@
         }
       };
       var requestFrame = function () {
-        if (!animating) {
-          window.requestAnimationFrame(doFrame);
+        if (!rendering) {
+          window.requestAnimationFrame(render);
         }
-        animating = true;
+        rendering = true;
       };
-      var doFrame = function () {
-        notifyListeners('doFrame');
-        animating = false;
+      var render = function () {
+        notifyListeners('render');
+        rendering = false;
       };
       var onScroll = function () {
-        latestKnownScrollY = window.pageYOffset;
-        notifyListeners('onScroll', latestKnownScrollY);
+        latestKnownScrollPosition = DomHelpers.getScrollPosition();
+        notifyListeners('onScroll', latestKnownScrollPosition);
         requestFrame();
       };
       var onResize = function () {
@@ -62,7 +62,6 @@
         }
       };
       var init = function () {
-        viewportSize = DomHelpers.getViewportSize();
         bindListeners();
       };
       init();
@@ -86,4 +85,4 @@
   // Expose ScrollProxy
   window.ScrollProxy = ScrollProxy;
 
-})(window, window.DomHelpers, window.ScrollProxyListener, _);
+})(window, window.GeometricHelpers, window.DomHelpers, window.ScrollProxyListener, _);

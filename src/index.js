@@ -1,3 +1,4 @@
+import './Helpers/GeometricHelpers';
 import './Helpers/DomHelpers';
 import './Core/ScrollProxyListener';
 import './Core/ScrollProxy';
