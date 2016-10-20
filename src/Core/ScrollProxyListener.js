@@ -19,6 +19,7 @@
 (function(window, DomHelpers, undefined) {
 
   function ScrollProxyListener() {
+    this.state = undefined;
     this.viewportSize = DomHelpers.getViewportSize();
     this.latestKnownScrollPosition = undefined;
 
@@ -37,7 +38,26 @@
     this.onResize = function (viewportSize) {
       this.viewportSize = viewportSize;
     };
+    /**
+     * @param state
+     */
+    this.setState = function(state) {
+      this.state = state;
+      this.onStateChanged(this.state);
+    };
+
+    /**
+     * @param state
+     */
+    this.onStateChanged = function(state) {
+
+    };
   }
+
+  ScrollProxyListener.STATE = {
+    IDLE: 'IDLE',
+    RUNNING: 'RUNNING'
+  };
 
   // Expose ScrollProxyListener
   window.ScrollProxyListener = ScrollProxyListener;
