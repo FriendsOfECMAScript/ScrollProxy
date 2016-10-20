@@ -54,7 +54,7 @@
       if (this.currentBreakpoint !== breakpoint) {
         this.currentBreakpoint = breakpoint;
         this.init();
-        this.doFrame();
+        this.render();
       }
     };
 

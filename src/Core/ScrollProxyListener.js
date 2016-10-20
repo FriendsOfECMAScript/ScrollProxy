@@ -10,7 +10,7 @@
  *
  * function SampleParallaxListener () {
    *   ScrollProxyListener.call(this);
-   *   // Implement base class methods (doFrame, onScroll, onResize)
+   *   // Implement base class methods (render, onScroll, onResize, setState, onStateChanged)
    * }
  * SampleParallaxListener.prototype = Object.create( ScrollProxyListener.prototype );
  *
