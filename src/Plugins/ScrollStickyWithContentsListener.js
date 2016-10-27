@@ -62,6 +62,9 @@
       this.maxStickyTranslate = Math.max(this.containerHeight - this.stickyHeight - this.stickyOffsetTop);
       this.maxStickyInnerTranslateY = (this.stickyHeight + this.stickyOffsetBottom) - this.viewportSize.height;
 
+      // sticky break limit
+      this.maxST = this.stickyExceedsViewport ? this.maxStickyTranslate + this.maxStickyInnerTranslateY + this.stickyOffsetTop : this.maxStickyTranslate;
+
       this.onScroll();
       this.render();
     };
@@ -90,12 +93,12 @@
       if (!this.needsRender) return;
 
       if (this.containerOffsetTop - this.triggerOffset < 0) {
-        var maxST = this.stickyExceedsViewport ? this.maxStickyTranslate + this.maxStickyInnerTranslateY + this.stickyOffsetTop : this.maxStickyTranslate;
+
 
         var absContainerOffsetTop = Math.abs(this.containerOffsetTop),
-          stickyTranslate = absContainerOffsetTop >= maxST ? maxST : absContainerOffsetTop;
+          stickyTranslate = absContainerOffsetTop >= this.maxST ? this.maxST : absContainerOffsetTop;
 
-        if (stickyTranslate === maxST) {
+        if (stickyTranslate === this.maxST) {
           TweenLite.set(this.$sticky, { position: 'absolute', top: this.maxStickyTranslate + this.stickyOffsetTop, y: '', left: '' });
         } else {
           var top = 0;

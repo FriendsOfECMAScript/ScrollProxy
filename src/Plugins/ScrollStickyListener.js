@@ -34,8 +34,8 @@
       this.reset();
 
       this.containerHeight = this.$container.height();
-      this.stickyHeight = this.$sticky.height();
-      this.stickyWidth = this.$sticky.width();
+      this.stickyHeight = this.$sticky.outerHeight();
+      this.stickyWidth = this.$sticky.outerWidth();
 
       this.maxStickyTranslate = Math.max(this.containerHeight - this.stickyHeight - this.stickyTopOffset - this.stickyBottomOffset, 0);
       this.stickyOffsetLeft = Math.floor(DomHelpers.getViewportData(this.$sticky.get(0), this.viewportSize).rect.left);
