@@ -63,7 +63,7 @@
       this.maxStickyInnerTranslateY = this.stickyHeight + this.stickyOffsetTop - this.viewportSize.height;
 
       // sticky break limit
-      this.maxST = this.stickyExceedsViewport ? this.maxStickyTranslate + this.maxStickyInnerTranslateY : this.maxStickyTranslate;
+      this.maxST = this.stickyExceedsViewport ? this.containerHeight - this.viewportSize.height : this.maxStickyTranslate;
 
       this.onScroll();
       this.render();
