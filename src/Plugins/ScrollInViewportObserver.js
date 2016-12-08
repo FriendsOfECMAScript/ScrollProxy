@@ -42,6 +42,8 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
 
     this.$elements = Array.from($elements);
     this.elementsViewportData = [];
+
+    this.init();
   }
 
   init() {
