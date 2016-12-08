@@ -18,15 +18,21 @@ export default (options) => {
     entry: './src/index',
     output: {
       path: join(__dirname, 'dist'),
-      libraryTarget: 'umd'
+      libraryTarget: 'window'
+    },
+    resolve: {
+      alias: {
+        TweenLite: join(__dirname, 'node_modules/gsap/src/uncompressed/TweenLite.js'),
+        CSSPlugin: join(__dirname, 'node_modules/gsap/src/uncompressed/plugins/CSSPlugin.js')
+      }
     },
     devtool: 'source-map',
     module: {
       loaders: [
         {
           test: /\.js$/,
-          loader: 'babel',
-          include
+          loader: 'babel-loader',
+          include: include
         }
       ]
     }

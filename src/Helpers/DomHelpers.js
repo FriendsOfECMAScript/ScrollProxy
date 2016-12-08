@@ -1,44 +1,37 @@
 /*
- * @author Mikel Tuesta <mikeltuesta@gmail.com>
+ * This file is part of the FoesScrollProxy library.
+ *
+ * (c) Mikel Tuesta <mikeltuesta@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
-'use strict';
 
-(function (window, GeometricHelpers) {
+import {Position2D, Dimension2D} from './GeometricHelpers';
 
-  var DomHelpers = Object.create({});
+class DOMHelpers {
 
-  DomHelpers.getDocumentHeight = function () {
-    var body = document.body,
+  static getDocumentHeight = () => {
+    let body = document.body,
       html = document.documentElement;
 
     return Math.max(body.scrollHeight, body.offsetHeight, html.clientHeight, html.scrollHeight, html.offsetHeight);
   };
 
-  /**
-   *
-   * @returns {GeometricHelpers.Dimension2D}
-   */
-  DomHelpers.getViewportSize = function () {
-    var w = window,
+  static getViewportSize = () => {
+    let w = window,
       d = document,
       e = d.documentElement,
       g = d.getElementsByTagName('body')[0];
 
-    return new GeometricHelpers.Dimension2D(
+    return new Dimension2D(
       w.innerHeight || e.clientHeight || g.clientHeight,
       w.innerWidth || e.clientWidth || g.clientWidth
     );
   };
 
-  /**
-   *
-   * @param element
-   * @param viewportSize {GeometricHelpers.Dimension2D}
-   * @returns {{isInViewport: boolean, rect: ClientRect}}
-   */
-
-  DomHelpers.getViewportData = function (element, viewportSize) {
-    var rect = element.getBoundingClientRect();
+  static getViewportData = (element, viewportSize) => {
+    let rect = element.getBoundingClientRect();
     return {
       isInViewport: (
         // Vertically
@@ -53,14 +46,9 @@
     };
   };
 
-  /**
-   * @returns {GeometricHelpers.Position2D}
-   */
-  DomHelpers.getScrollPosition = function () {
-    return new GeometricHelpers.Position2D(window.pageXOffset, window.pageYOffset);
+  static getScrollPosition = () => {
+    return new Position2D(window.pageXOffset, window.pageYOffset);
   };
+}
 
-  // Expose DomHelpers
-  window.DomHelpers = DomHelpers;
-
-})(window, window.GeometricHelpers);
+export default DOMHelpers;
