@@ -28,15 +28,16 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
     }
   };
 
-  /**
-   *
-   * @param $elements | Dom Elements array
-   * @param visibleFn | callback function that will be executed once an element has become visible
-   * @param invisibleFn | callback function that will be executed once an element has become invisible
-   */
-  constructor($elements = requiredParameter(), {visibleFn = () => {}, invisibleFn = () => {}} = {}) {
+  static UPDATE_MODE = {
+    RAF: 'RAF',
+    SCROLL: 'SCROLL'
+  };
+
+  constructor($elements = requiredParameter(), {updateMode = ScrollInViewportObserver.UPDATE_MODE.RAF, trackDirections = false, visibleFn = () => {}, invisibleFn = () => {}} = {}) {
     super();
 
+    this.updateMode = updateMode;
+    this.trackDirections = trackDirections;
     this.visibleFn = visibleFn;
     this.invisibleFn = invisibleFn;
 
@@ -47,7 +48,7 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   }
 
   init() {
-    this.onScroll();
+    this.onScroll(this.scrollPosition);
     this.updateDOM();
   }
 
@@ -55,47 +56,53 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
     this.$elements.push(...$elements);
   };
 
-  refreshElementsViewportData() {
+  onScroll(scrollPosition) {
+    if (super.onScroll(scrollPosition) === false) return;
+
+    if (this.updateMode === ScrollInViewportObserver.UPDATE_MODE.SCROLL) {
+      this.$elements.forEach((element, index) => {
+        this.updateElementViewportData(element, index);
+      });
+    }
+  }
+
+  updateDOM() {
+    if (super.updateDOM() === false) return;
+
     this.$elements.forEach((element, index) => {
-      let inViewportData = this.elementsViewportData[index],
-        newInViewportData = DOMHelpers.getViewportData(element, this.viewportSize),
-        elementWasVisible = false,
-        elementIsVisible = false;
+      if (this.updateMode === ScrollInViewportObserver.UPDATE_MODE.RAF) {
+        this.updateElementViewportData(element, index);
+      }
 
-      if (inViewportData !== undefined) {
-        // We have previous data
-        elementWasVisible = inViewportData.isInViewport;
-        elementIsVisible = newInViewportData.isInViewport;
+      const updatedInViewportData = this.elementsViewportData[index];
+      if (updatedInViewportData.isInViewport && !updatedInViewportData.wasInViewport) {
+        this.visibleFn(index, element, updatedInViewportData.fromVertical, updatedInViewportData.fromHorizontal);
+      } else if (!updatedInViewportData.isInViewport && updatedInViewportData.wasInViewport) {
+        this.invisibleFn(index, element, updatedInViewportData.toVertical, updatedInViewportData.toHorizontal);
+      }
+    });
+  }
 
-        if (elementWasVisible && !elementIsVisible) {
+  updateElementViewportData(element, index) {
+    let inViewportData = this.elementsViewportData[index],
+      newInViewportData = DOMHelpers.getViewportData(element, this.viewportSize);
+
+    if (inViewportData !== undefined) {
+      newInViewportData.wasInViewport = inViewportData.isInViewport;
+
+      if (this.trackDirections) {
+        if (inViewportData.isInViewport && !newInViewportData.isInViewport) {
           // Element has become invisible in viewport
           newInViewportData.toVertical = inViewportData.rect.top > newInViewportData.rect.top ? ScrollInViewportObserver.IN_VIEWPORT.TO.TOP : ScrollInViewportObserver.IN_VIEWPORT.TO.BOTTOM;
           newInViewportData.toHorizontal = inViewportData.rect.left > newInViewportData.rect.left ? ScrollInViewportObserver.IN_VIEWPORT.TO.LEFT : ScrollInViewportObserver.IN_VIEWPORT.TO.RIGHT;
-
-        } else if (!elementWasVisible && elementIsVisible) {
+        } else if (!inViewportData.isInViewport && newInViewportData.isInViewport) {
           // Element has become visible in viewport
           newInViewportData.fromVertical = inViewportData.rect.top < newInViewportData.rect.top ? ScrollInViewportObserver.IN_VIEWPORT.FROM.TOP : ScrollInViewportObserver.IN_VIEWPORT.FROM.BOTTOM;
           newInViewportData.fromHorizontal = inViewportData.rect.left < newInViewportData.rect.left ? ScrollInViewportObserver.IN_VIEWPORT.FROM.LEFT : ScrollInViewportObserver.IN_VIEWPORT.FROM.RIGHT;
         }
-        newInViewportData.wasInViewport = elementWasVisible;
       }
-      this.elementsViewportData[index] = newInViewportData;
-    });
-  }
-
-  updateDOM() {
-    super.updateDOM();
-
-    this.refreshElementsViewportData();
-
-    this.$elements.forEach((element, index) => {
-      const inViewportData = this.elementsViewportData[index];
-      if (inViewportData.isInViewport && !inViewportData.wasInViewport) {
-        this.visibleFn(index, element, inViewportData.fromVertical, inViewportData.fromHorizontal);
-      } else if (!inViewportData.isInViewport && inViewportData.wasInViewport) {
-        this.invisibleFn(index, element, inViewportData.toVertical, inViewportData.toHorizontal);
-      }
-    });
+    }
+    this.elementsViewportData[index] = newInViewportData;
   }
 }
 

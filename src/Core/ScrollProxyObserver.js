@@ -44,7 +44,7 @@ class ScrollProxyObserver {
   }
 
   onScroll(scrollPosition) {
-    if (this.state === ScrollProxyObserver.STATE.IDLE) return;
+    if (this.state === ScrollProxyObserver.STATE.IDLE) return false;
     this.scrollPosition = scrollPosition;
   }
 
@@ -53,7 +53,7 @@ class ScrollProxyObserver {
   }
 
   updateDOM() {
-    if (this.state === ScrollProxyObserver.STATE.IDLE) return;
+    if (this.state === ScrollProxyObserver.STATE.IDLE) return false;
   }
 
   destroy() {

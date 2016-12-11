@@ -17,16 +17,14 @@ class ScrollProxy {
     this.observers = new Map();
     this.isUpdatingDOM = false;
 
-    // private methods
-
     this.onScroll = () => {
-      let scrollPosition = DOMHelpers.getScrollPosition();
+      const scrollPosition = DOMHelpers.getScrollPosition();
       this.notifyObservers('onScroll', scrollPosition);
       this.requestDOMUpdate();
     };
 
     this.onResize = () => {
-      let viewportSize = DOMHelpers.getViewportSize();
+      const viewportSize = DOMHelpers.getViewportSize();
       this.notifyObservers('onResize', viewportSize);
     };
 
@@ -52,8 +50,6 @@ class ScrollProxy {
     window.addEventListener('resize', debounce(this.onResize, 200));
   }
 
-  // Public methods
-
   addObserver = (observer) => {
     if (!(observer instanceof ScrollProxyObserver)) {
       throw new TypeError('Provided object must inherit from ScrollProxyObserver abstract class.');
@@ -67,7 +63,6 @@ class ScrollProxy {
   removeObserver = (uuid) => {
     return this.observers.delete(uuid);
   };
-
 }
 
 const instance = new ScrollProxy();

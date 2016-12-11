@@ -36,11 +36,13 @@ class DOMHelpers {
       isInViewport: (
         // Vertically
         (rect.top >= 0 && rect.top <= viewportSize.height) ||
-        (rect.bottom >= 0 && rect.bottom <= viewportSize.height)
+        (rect.bottom >= 0 && rect.bottom <= viewportSize.height) ||
+        (rect.top < 0 && rect.bottom > viewportSize.height)
       ) && (
         // Horizontally
         (rect.left >= 0 && rect.left <= viewportSize.width) ||
-        (rect.right >= 0 && rect.right <= viewportSize.width)
+        (rect.right >= 0 && rect.right <= viewportSize.width) ||
+        (rect.left < 0 && rect.right > viewportSize.width)
       ),
       rect: rect
     };

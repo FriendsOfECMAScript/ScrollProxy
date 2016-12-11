@@ -12,7 +12,7 @@ import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 import TweenLite from 'TweenLite';
 import CSSPlugin from 'CSSPlugin';
 
-class ScrollStickyObserver extends ScrollProxyObserver {
+class ScrollBasicStickyObserver extends ScrollProxyObserver {
 
   constructor($sticky = requiredParameter(), $container = requiredParameter(), {stickyTopOffset = 0, stickyBottomOffset = 0, triggerOffset = 0} = {}) {
     super();
@@ -43,7 +43,7 @@ class ScrollStickyObserver extends ScrollProxyObserver {
     this.maxStickyTranslate = Math.max(this.containerHeight - this.stickyHeight - this.stickyTopOffset - this.stickyBottomOffset, 0);
     this.stickyOffsetLeft = this.$sticky[0].getBoundingClientRect().left;
 
-    this.onScroll();
+    this.onScroll(this.scrollPosition);
     this.updateDOM();
   };
 
@@ -53,7 +53,7 @@ class ScrollStickyObserver extends ScrollProxyObserver {
   };
 
   updateDOM() {
-    super.updateDOM();
+    if (super.updateDOM() === false) return;
 
     let stickyTranslate = 0;
 
@@ -80,7 +80,7 @@ class ScrollStickyObserver extends ScrollProxyObserver {
   }
 
   onScroll(scrollPosition) {
-    super.onScroll(scrollPosition);
+    if (super.onScroll(scrollPosition) === false) return;
 
     this.containerOffsetTop = Math.floor(this.$container[0].getBoundingClientRect().top);
   }
@@ -99,4 +99,4 @@ class ScrollStickyObserver extends ScrollProxyObserver {
 
 }
 
-export default ScrollStickyObserver;
+export default ScrollBasicStickyObserver;

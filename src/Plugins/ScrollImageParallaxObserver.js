@@ -43,7 +43,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
       TweenLite.set(image, {scale: this.scale, y: this.direction * (this.scale - 1) * h / 2});
     });
 
-    this.onScroll();
+    this.onScroll(this.scrollPosition);
     this.updateDOM();
   }
 
@@ -53,7 +53,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
   }
 
   updateDOM() {
-    super.updateDOM();
+    if (super.updateDOM() === false) return;
 
     this.$images.forEach((image, index) => {
       const inViewportData = DOMHelpers.getViewportData(image.parentNode, this.viewportSize);

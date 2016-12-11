@@ -39,7 +39,7 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
       this.elementsHeights[index] = element.offsetHeight;
     });
 
-    this.onScroll();
+    this.onScroll(this.scrollPosition);
     this.updateDOM();
   }
 
@@ -49,7 +49,7 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
   }
 
   updateDOM() {
-    super.updateDOM();
+    if (super.updateDOM() === false) return;
 
     this.$elements.forEach((element, index) => {
       const inViewportData = DOMHelpers.getViewportData(element, this.viewportSize);
