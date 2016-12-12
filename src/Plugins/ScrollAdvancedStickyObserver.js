@@ -8,7 +8,6 @@
  */
 
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
-import DOMHelpers from '../Helpers/DOMHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 import TweenLite from 'TweenLite';
 import CSSPlugin from 'CSSPlugin';
@@ -67,11 +66,18 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
     this.reset();
 
     // Set if sticky is needed and if so, which stickySubject will play as the sticky element
-    this.stickyElement = this.stickyCandidateElementA.getBoundingClientRect().height > this.stickyCandidateElementB.getBoundingClientRect().height
-      ? this.stickyCandidateElementB
-      : this.stickyCandidateElementA;
-    this.stickyRect = this.stickyElement.getBoundingClientRect();
+    const stickyCandidateElementARect = this.stickyCandidateElementA.getBoundingClientRect(),
+      stickyCandidateElementBRect = this.stickyCandidateElementB.getBoundingClientRect();
+
+    if (stickyCandidateElementARect.height > stickyCandidateElementBRect.height) {
+      this.stickyElement = this.stickyCandidateElementB;
+      this.stickyRect = stickyCandidateElementBRect;
+    } else {
+      this.stickyElement = this.stickyCandidateElementA;
+      this.stickyRect = stickyCandidateElementARect;
+    }
     this.containerRect = this.containerElement.getBoundingClientRect();
+
     this.stickyIsNeeded = this.stickyRect.height + this.stickyOffsetBottom < this.containerRect.height;
 
     if (!this.stickyIsNeeded) {

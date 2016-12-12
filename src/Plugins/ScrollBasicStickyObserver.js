@@ -15,8 +15,8 @@ import CSSPlugin from 'CSSPlugin';
 class ScrollBasicStickyObserver extends ScrollProxyObserver {
 
   constructor(
-    $sticky = requiredParameter(),
-    $container = requiredParameter(),
+    stickyElement = requiredParameter(),
+    containerElement = requiredParameter(),
     {
       stickyTopOffset = 0,
       stickyBottomOffset = 0,
@@ -24,18 +24,17 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
     } = {}) {
     super();
 
-    this.$sticky = $sticky;
-    this.$container = $container;
+    this.stickyElement = stickyElement;
+    this.containerElement = containerElement;
+
+    this.triggerOffset = triggerOffset;
     this.stickyTopOffset = stickyTopOffset;
     this.stickyBottomOffset = stickyBottomOffset;
-    this.triggerOffset = triggerOffset;
 
     this.maxStickyTranslate = -1;
-    this.containerHeight = -1;
-    this.stickyHeight = -1;
 
-    this.containerOffsetTop = -1;
-    this.stickyOffsetLeft = -1;
+    this.stickyRect = {};
+    this.containerRect = {};
 
     this.init();
   }
@@ -43,20 +42,22 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
   init() {
     this.reset();
 
-    this.containerHeight = this.$container[0].getBoundingClientRect().height;
-    this.stickyHeight = this.$sticky[0].getBoundingClientRect().height;
-    this.stickyWidth = this.$sticky[0].getBoundingClientRect().width;
+    this.stickyRect = this.stickyElement.getBoundingClientRect();
+    this.containerRect = this.containerElement.getBoundingClientRect();
 
-    this.maxStickyTranslate = Math.max(this.containerHeight - this.stickyHeight - this.stickyTopOffset - this.stickyBottomOffset, 0);
-    this.stickyOffsetLeft = this.$sticky[0].getBoundingClientRect().left;
+    this.maxStickyTranslate = Math.max(this.containerRect.height - this.stickyRect.height - this.stickyTopOffset - this.stickyBottomOffset, 0);
+
+    // Set width (for fixed state)
+    console.log(this.stickyRect.width);
+    TweenLite.set(this.stickyElement, {width: this.stickyRect.width, immediateRender: true});
 
     this.onScroll(this.scrollPosition);
     this.updateDOM();
   };
 
   reset() {
-    TweenLite.killTweensOf(this.$sticky);
-    TweenLite.set(this.$sticky, {clearProps: 'all', immediateRender: true});
+    TweenLite.killTweensOf(this.stickyElement);
+    TweenLite.set(this.stickyElement, {clearProps: 'all', immediateRender: true});
   };
 
   updateDOM() {
@@ -66,37 +67,37 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
 
     let stickyTranslate = 0;
 
-    if (this.triggerOffset + this.containerOffsetTop < 0) {
-      let absContainerOffsetTop = Math.abs(this.containerOffsetTop);
+    if (this.containerRect.top - this.triggerOffset < 0) {
+      let absContainerOffsetTop = Math.abs(this.containerRect.top);
       stickyTranslate = absContainerOffsetTop >= this.maxStickyTranslate ? this.maxStickyTranslate : absContainerOffsetTop;
       if (stickyTranslate === this.maxStickyTranslate) {
-        TweenLite.set(this.$sticky, {
+        TweenLite.set(this.stickyElement, {
           position: 'absolute',
           top: this.maxStickyTranslate + this.stickyTopOffset,
           left: ''
         });
       } else {
-        TweenLite.set(this.$sticky, {
+        TweenLite.set(this.stickyElement, {
           position: 'fixed',
           top: this.stickyTopOffset,
-          left: this.stickyOffsetLeft,
-          width: this.stickyWidth
+          left: this.stickyRect.left
         });
       }
     } else {
-      TweenLite.set(this.$sticky, {clearProps: 'all'});
+      TweenLite.set(this.stickyElement, {clearProps: 'position, top, left'});
     }
   }
 
   onScroll(scrollPosition) {
     this.setScrollPosition(scrollPosition);
 
-    this.containerOffsetTop = Math.floor(this.$container[0].getBoundingClientRect().top);
+    this.containerRect = this.containerElement.getBoundingClientRect();
   }
 
   onResize(viewportSize) {
     super.onResize(viewportSize);
 
+    TweenLite.set(this.stickyElement, {clearProps: 'width', immediateRender: true});
     this.init();
   }
 
