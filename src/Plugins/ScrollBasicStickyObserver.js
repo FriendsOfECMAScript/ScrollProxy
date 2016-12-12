@@ -9,8 +9,9 @@
 
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
-import TweenLite from 'TweenLite';
-import CSSPlugin from 'CSSPlugin';
+
+import TweenLite from 'gsap/src/uncompressed/TweenLite';
+import CSSPlugin from 'gsap/src/uncompressed/plugins/CSSPlugin';
 
 class ScrollBasicStickyObserver extends ScrollProxyObserver {
 
@@ -48,7 +49,6 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
     this.maxStickyTranslate = Math.max(this.containerRect.height - this.stickyRect.height - this.stickyTopOffset - this.stickyBottomOffset, 0);
 
     // Set width (for fixed state)
-    console.log(this.stickyRect.width);
     TweenLite.set(this.stickyElement, {width: this.stickyRect.width, immediateRender: true});
 
     this.onScroll(this.scrollPosition);

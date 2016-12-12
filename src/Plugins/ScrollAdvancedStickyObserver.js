@@ -9,8 +9,9 @@
 
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
-import TweenLite from 'TweenLite';
-import CSSPlugin from 'CSSPlugin';
+
+import TweenLite from 'gsap/src/uncompressed/TweenLite';
+import CSSPlugin from 'gsap/src/uncompressed/plugins/CSSPlugin';
 
 class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
@@ -92,8 +93,8 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
     // sticky break limit
     this.maxST = this.stickyExceedsViewport
-      ? this.containerRect.height - this.viewportSize.height + this.stickyOffsetTop + this.stickyInnerOffsetBottom
-      : this.maxStickyTranslate;
+      ? this.containerRect.height - this.viewportSize.height + this.triggerOffset + (this.stickyInnerOffsetBottom - this.stickyOffsetBottom)
+      : this.maxStickyTranslate - this.stickyOffsetTop + this.triggerOffset;
 
     // Set width (for fixed state)
     TweenLite.set(this.stickyElement, {width: this.stickyRect.width, immediateRender: true});
@@ -152,11 +153,11 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
       return;
     }
 
-    const breakCondition = this.stickyExceedsViewport
-      ? this.containerRect.top + this.stickyOffsetTop - this.stickyInnerOffsetTop - this.triggerOffset < 0
+    const stickyCondition = this.stickyExceedsViewport
+      ? this.containerRect.top - this.triggerOffset + (this.stickyOffsetTop - this.stickyInnerOffsetTop) < 0
       : this.containerRect.top - this.triggerOffset < 0;
 
-    if (breakCondition) {
+    if (stickyCondition) {
       const absContainerOffsetTop = Math.abs(this.containerRect.top - this.triggerOffset),
         stickyTranslate = absContainerOffsetTop >= this.maxST ? this.maxST : absContainerOffsetTop;
 

@@ -22,8 +22,7 @@ export default (options) => {
     },
     resolve: {
       alias: {
-        TweenLite: join(__dirname, 'node_modules/gsap/src/uncompressed/TweenLite.js'),
-        CSSPlugin: join(__dirname, 'node_modules/gsap/src/uncompressed/plugins/CSSPlugin.js')
+        TweenLite: join(__dirname, 'node_modules/gsap/src/uncompressed/TweenLite.js')
       }
     },
     devtool: 'source-map',
