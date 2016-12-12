@@ -53,7 +53,9 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
   }
 
   updateDOM() {
-    if (super.updateDOM() === false) return;
+    if (!this.isRunning()) {
+      return;
+    }
 
     this.$images.forEach((image, index) => {
       const inViewportData = DOMHelpers.getViewportData(image.parentNode, this.viewportSize);

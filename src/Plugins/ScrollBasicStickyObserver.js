@@ -53,7 +53,9 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
   };
 
   updateDOM() {
-    if (super.updateDOM() === false) return;
+    if (!this.isRunning()) {
+      return;
+    }
 
     let stickyTranslate = 0;
 
@@ -80,7 +82,7 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
   }
 
   onScroll(scrollPosition) {
-    if (super.onScroll(scrollPosition) === false) return;
+    this.setScrollPosition(scrollPosition);
 
     this.containerOffsetTop = Math.floor(this.$container[0].getBoundingClientRect().top);
   }

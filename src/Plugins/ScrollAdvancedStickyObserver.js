@@ -75,7 +75,7 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
     // sticky break limit
     this.maxST = this.stickyExceedsViewport
-      ? this.containerRect.height - this.viewportSize.height + this.stickyInnerOffsetTop + this.stickyInnerOffsetBottom
+      ? this.containerRect.height - this.viewportSize.height + this.stickyOffsetTop + this.stickyInnerOffsetBottom
       : this.maxStickyTranslate;
 
     // Set width (for fixed state)
@@ -85,6 +85,15 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
     this.updateDOM();
   }
 
+  setOffsets({ triggerOffset = 0, stickyOffsetTop = 0, stickyOffsetBottom = 0, stickyInnerOffsetTop = 0, stickyInnerOffsetBottom = 0 } = {}) {
+    this.triggerOffset = triggerOffset;
+    this.stickyOffsetTop = stickyOffsetTop;
+    this.stickyOffsetBottom = stickyOffsetBottom;
+    this.stickyInnerOffsetTop = stickyInnerOffsetTop;
+    this.stickyInnerOffsetBottom = stickyInnerOffsetBottom;
+    this.init();
+  }
+
   reset() {
     if (this.stickyElement !== null) {
       TweenLite.killTweensOf(this.stickyElement);
@@ -92,10 +101,12 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
     }
   }
 
-  onScroll(scrollPosition) {
-    if (super.onScroll(scrollPosition) === false) return;
+  isRunning() {
+    return super.isRunning() && this.stickyIsNeeded;
+  }
 
-    if (!this.stickyIsNeeded) return;
+  onScroll(scrollPosition) {
+    this.setScrollPosition(scrollPosition);
 
     this.stickyRect = this.stickyElement.getBoundingClientRect();
     this.containerRect = this.containerElement.getBoundingClientRect();
@@ -110,9 +121,9 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
   }
 
   updateDOM() {
-    if (super.updateDOM() === false) return;
-
-    if (!this.stickyIsNeeded) return;
+    if (!this.isRunning()) {
+      return;
+    }
 
     const breakCondition = this.stickyExceedsViewport
       ? this.containerRect.top + this.stickyOffsetTop - this.stickyInnerOffsetTop - this.triggerOffset < 0

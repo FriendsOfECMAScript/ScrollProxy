@@ -23,16 +23,19 @@ class ScrollProxyObserver {
       throw new TypeError("Abstract class ScrollProxyObserver cannot be instantiated directly.");
     }
 
-    // Child has not implemented this abstract method.
-    if (this.updateDOM === ScrollProxyObserver.prototype.updateDOM) {
-      throw new TypeError("In order to extend ScrollProxyObserver class you must implement updateDOM method.");
-    }
-
     this.state = ScrollProxyObserver.STATE.RUNNING;
     this.scrollPosition = DOMHelpers.getScrollPosition();
     this.viewportSize = DOMHelpers.getViewportSize();
     // Add self as observer
     this.uuid = ScrollProxy.addObserver(this);
+
+    this.setScrollPosition = (scrollPosition) => {
+      if (!this.isRunning()) {
+        return;
+      }
+
+      this.scrollPosition = scrollPosition;
+    };
   }
 
   setState(state) {
@@ -43,17 +46,20 @@ class ScrollProxyObserver {
   onStateChanged(state) {
   }
 
+  isRunning() {
+    return this.state !== ScrollProxyObserver.STATE.IDLE;
+  }
+
   onScroll(scrollPosition) {
-    if (this.state === ScrollProxyObserver.STATE.IDLE) return false;
-    this.scrollPosition = scrollPosition;
+    this.setScrollPosition(scrollPosition);
+  }
+
+  updateDOM() {
+    throw new TypeError("In order to extend ScrollProxyObserver class you must implement updateDOM method.");
   }
 
   onResize(viewportSize) {
     this.viewportSize = viewportSize;
-  }
-
-  updateDOM() {
-    if (this.state === ScrollProxyObserver.STATE.IDLE) return false;
   }
 
   destroy() {

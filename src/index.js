@@ -7,6 +7,7 @@ import ScrollImageParallaxObserver from './Plugins/ScrollImageParallaxObserver';
 import ScrollInViewportObserver from './Plugins/ScrollInViewportObserver';
 import ScrollBasicStickyObserver from './Plugins/ScrollBasicStickyObserver';
 import ScrollAdvancedStickyObserver from './Plugins/ScrollAdvancedStickyObserver';
+import ScrollDirectionObserver from './Plugins/ScrollDirectionObserver';
 
 export {
   GeometricHelpers,
@@ -16,5 +17,6 @@ export {
   ScrollImageParallaxObserver,
   ScrollInViewportObserver,
   ScrollBasicStickyObserver,
-  ScrollAdvancedStickyObserver
+  ScrollAdvancedStickyObserver,
+  ScrollDirectionObserver
 }

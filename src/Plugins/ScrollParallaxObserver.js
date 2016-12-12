@@ -49,7 +49,9 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
   }
 
   updateDOM() {
-    if (super.updateDOM() === false) return;
+    if (!this.isRunning()) {
+      return;
+    }
 
     this.$elements.forEach((element, index) => {
       const inViewportData = DOMHelpers.getViewportData(element, this.viewportSize);

@@ -57,7 +57,7 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   };
 
   onScroll(scrollPosition) {
-    if (super.onScroll(scrollPosition) === false) return;
+    this.setScrollPosition(scrollPosition);
 
     if (this.updateMode === ScrollInViewportObserver.UPDATE_MODE.SCROLL) {
       this.$elements.forEach((element, index) => {
@@ -67,7 +67,9 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   }
 
   updateDOM() {
-    if (super.updateDOM() === false) return;
+    if (!this.isRunning()) {
+      return;
+    }
 
     this.$elements.forEach((element, index) => {
       if (this.updateMode === ScrollInViewportObserver.UPDATE_MODE.RAF) {
