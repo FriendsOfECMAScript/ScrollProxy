@@ -20,7 +20,12 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
     NEGATIVE: -1
   };
 
-  constructor($elements = requiredParameter(), {direction = ScrollParallaxObserver.DIRECTION.NEGATIVE, maxTranslate = 200} = {}) {
+  constructor(
+    $elements = requiredParameter(),
+    {
+      direction = ScrollParallaxObserver.DIRECTION.NEGATIVE,
+      maxTranslate = 200
+    } = {}) {
     super();
 
     this.direction = direction;

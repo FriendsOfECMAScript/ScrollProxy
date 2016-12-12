@@ -33,7 +33,14 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
     SCROLL: 'SCROLL'
   };
 
-  constructor($elements = requiredParameter(), {updateMode = ScrollInViewportObserver.UPDATE_MODE.RAF, trackDirections = false, visibleFn = () => {}, invisibleFn = () => {}} = {}) {
+  constructor(
+    $elements = requiredParameter(),
+    {
+      updateMode = ScrollInViewportObserver.UPDATE_MODE.RAF,
+      trackDirections = false,
+      visibleFn = () => {},
+      invisibleFn = () => {}
+    } = {}) {
     super();
 
     this.updateMode = updateMode;

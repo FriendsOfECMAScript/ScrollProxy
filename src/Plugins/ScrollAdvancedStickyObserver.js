@@ -20,8 +20,17 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
     DOWN: 'DOWN'
   };
 
-  constructor(stickyCandidateElementA = requiredParameter(), stickyCandidateElementB = requiredParameter(), container = requiredParameter(),
-    { triggerOffset = 0, stickyOffsetTop = 0, stickyOffsetBottom = 0, stickyInnerOffsetTop = 0, stickyInnerOffsetBottom = 0 } = {}) {
+  constructor(
+    stickyCandidateElementA = requiredParameter(),
+    stickyCandidateElementB = requiredParameter(),
+    container = requiredParameter(),
+    {
+      triggerOffset = 0,
+      stickyOffsetTop = 0,
+      stickyOffsetBottom = 0,
+      stickyInnerOffsetTop = 0,
+      stickyInnerOffsetBottom = 0
+    } = {}) {
     super();
 
     this.stickyIsNeeded = false;
@@ -65,7 +74,9 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
     this.containerRect = this.containerElement.getBoundingClientRect();
     this.stickyIsNeeded = this.stickyRect.height + this.stickyOffsetBottom < this.containerRect.height;
 
-    if (!this.stickyIsNeeded) return;
+    if (!this.stickyIsNeeded) {
+      return;
+    }
 
     this.latestKnownScrollY = window.pageYOffset;
 
@@ -79,13 +90,19 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
       : this.maxStickyTranslate;
 
     // Set width (for fixed state)
-    TweenLite.set(this.stickyElement, { width: this.stickyRect.width, immediateRender: true });
+    TweenLite.set(this.stickyElement, {width: this.stickyRect.width, immediateRender: true});
 
     this.onScroll(this.scrollPosition);
     this.updateDOM();
   }
 
-  setOffsets({ triggerOffset = 0, stickyOffsetTop = 0, stickyOffsetBottom = 0, stickyInnerOffsetTop = 0, stickyInnerOffsetBottom = 0 } = {}) {
+  setOffsets({
+    triggerOffset = 0,
+    stickyOffsetTop = 0,
+    stickyOffsetBottom = 0,
+    stickyInnerOffsetTop = 0,
+    stickyInnerOffsetBottom = 0
+  } = {}) {
     this.triggerOffset = triggerOffset;
     this.stickyOffsetTop = stickyOffsetTop;
     this.stickyOffsetBottom = stickyOffsetBottom;
@@ -97,7 +114,7 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
   reset() {
     if (this.stickyElement !== null) {
       TweenLite.killTweensOf(this.stickyElement);
-      TweenLite.set(this.stickyElement, { clearProps: 'all', immediateRender: true });
+      TweenLite.set(this.stickyElement, {clearProps: 'all', immediateRender: true});
     }
   }
 
@@ -106,6 +123,10 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
   }
 
   onScroll(scrollPosition) {
+    if (!this.isRunning()) {
+      return;
+    }
+
     this.setScrollPosition(scrollPosition);
 
     this.stickyRect = this.stickyElement.getBoundingClientRect();
@@ -134,12 +155,19 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
         stickyTranslate = absContainerOffsetTop >= this.maxST ? this.maxST : absContainerOffsetTop;
 
       if (stickyTranslate === this.maxST) {
-        TweenLite.set(this.stickyElement, { position: 'absolute', top: this.maxStickyTranslate, y: '', left: '' });
+        TweenLite.set(this.stickyElement, {position: 'absolute', top: this.maxStickyTranslate, y: '', left: ''});
       } else {
         const top = this.stickyExceedsViewport
-          ? Math.floor(Math.min(Math.max(this.stickyRect.top + this.latestKnownScrollYDelta, -this.maxStickyInnerTranslateY), this.stickyInnerOffsetTop))
+          ? Math.floor(
+          Math.min(
+            Math.max(
+              this.stickyRect.top + this.latestKnownScrollYDelta,
+              -this.maxStickyInnerTranslateY
+            ),
+            this.stickyInnerOffsetTop
+          ))
           : this.stickyOffsetTop;
-        TweenLite.set(this.stickyElement, { position: 'fixed', top: 0, y: top, left: this.stickyRect.left });
+        TweenLite.set(this.stickyElement, {position: 'fixed', top: 0, y: top, left: this.stickyRect.left});
       }
     } else {
       TweenLite.set(this.stickyElement, {clearProps: 'position, top, y, left'});

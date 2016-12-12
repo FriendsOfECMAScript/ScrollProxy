@@ -14,7 +14,14 @@ import CSSPlugin from 'CSSPlugin';
 
 class ScrollBasicStickyObserver extends ScrollProxyObserver {
 
-  constructor($sticky = requiredParameter(), $container = requiredParameter(), {stickyTopOffset = 0, stickyBottomOffset = 0, triggerOffset = 0} = {}) {
+  constructor(
+    $sticky = requiredParameter(),
+    $container = requiredParameter(),
+    {
+      stickyTopOffset = 0,
+      stickyBottomOffset = 0,
+      triggerOffset = 0
+    } = {}) {
     super();
 
     this.$sticky = $sticky;

@@ -20,7 +20,13 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
     NEGATIVE: -1
   };
 
-  constructor($images = requiredParameter(), {scale = 1.2, direction = ScrollImageParallaxObserver.DIRECTION.NEGATIVE, breakpoints = [640, 860, 1024, 1280]} = {}) {
+  constructor(
+    $images = requiredParameter(),
+    {
+      scale = 1.2,
+      direction = ScrollImageParallaxObserver.DIRECTION.NEGATIVE,
+      breakpoints = [640, 860, 1024, 1280]
+    } = {}) {
     super();
 
     this.breakpoints = breakpoints;

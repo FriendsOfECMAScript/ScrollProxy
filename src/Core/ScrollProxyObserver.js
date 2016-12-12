@@ -30,10 +30,6 @@ class ScrollProxyObserver {
     this.uuid = ScrollProxy.addObserver(this);
 
     this.setScrollPosition = (scrollPosition) => {
-      if (!this.isRunning()) {
-        return;
-      }
-
       this.scrollPosition = scrollPosition;
     };
   }
@@ -51,6 +47,10 @@ class ScrollProxyObserver {
   }
 
   onScroll(scrollPosition) {
+    if (!this.isRunning()) {
+      return;
+    }
+
     this.setScrollPosition(scrollPosition);
   }
 

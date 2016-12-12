@@ -16,7 +16,11 @@ class ScrollDirectionObserver extends ScrollProxyObserver {
     DOWN: 'DOWN'
   };
 
-  constructor( onScrollDirectionChangedFn = () => {}, { minScrollYDelta = 0 } ) {
+  constructor(
+    onScrollDirectionChangedFn = () => {},
+    {
+      minScrollYDelta = 0
+    }) {
     super();
 
     this.latestKnownScrollY = 0;
