@@ -13,12 +13,18 @@ import {join} from 'path';
 
 const include = join(__dirname, 'src');
 
+const isUmd = (options) => {
+  return typeof options !== 'undefined'
+    && typeof options.libraryTarget !== 'undefined'
+    && options.libraryTarget === 'umd';
+};
+
 export default (options) => {
   return {
     entry: './src/index',
     output: {
       path: join(__dirname, 'dist'),
-      libraryTarget: 'window'
+      libraryTarget: isUmd(options) ? 'window' : 'commonjs'
     },
     resolve: {
       alias: {
