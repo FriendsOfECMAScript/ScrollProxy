@@ -13,20 +13,31 @@ import {join} from 'path';
 
 const include = join(__dirname, 'src');
 
+const isUmd = (options) => {
+  return typeof options !== 'undefined'
+    && typeof options.libraryTarget !== 'undefined'
+    && options.libraryTarget === 'umd';
+};
+
 export default (options) => {
   return {
     entry: './src/index',
     output: {
       path: join(__dirname, 'dist'),
-      libraryTarget: 'umd'
+      libraryTarget: isUmd(options) ? 'window' : 'commonjs'
+    },
+    resolve: {
+      alias: {
+        TweenLite: join(__dirname, 'node_modules/gsap/src/uncompressed/TweenLite.js')
+      }
     },
     devtool: 'source-map',
     module: {
       loaders: [
         {
           test: /\.js$/,
-          loader: 'babel',
-          include
+          loader: 'babel-loader',
+          include: include
         }
       ]
     }
