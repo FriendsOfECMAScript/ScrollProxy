@@ -50,7 +50,7 @@ class ScrollProxy {
     window.addEventListener('resize', debounce(this.onResize, 200));
   }
 
-  addObserver = (observer) => {
+  addObserver(observer) {
     if (!(observer instanceof ScrollProxyObserver)) {
       throw new TypeError('Provided object must inherit from ScrollProxyObserver abstract class.');
     }
@@ -60,7 +60,7 @@ class ScrollProxy {
     return uuid;
   };
 
-  removeObserver = (uuid) => {
+  removeObserver(uuid) {
     return this.observers.delete(uuid);
   };
 }

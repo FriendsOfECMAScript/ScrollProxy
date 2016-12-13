@@ -68,7 +68,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
       const inViewportData = DOMHelpers.getViewportData(image.parentNode, this.viewportSize);
       if (inViewportData.isInViewport) {
         const maxTranslate = (this.scale - 1) * this.imagesHeights[index],
-          percentage = inViewportData.rect.bottom / ( this.viewportSize.height + this.imagesHeights[index] ),
+          percentage = (inViewportData.rect.position.y + inViewportData.rect.dimension.height) / ( this.viewportSize.height + this.imagesHeights[index] ),
           translate = (percentage - .5) * this.direction * maxTranslate;
 
         TweenLite.to(image, .5, {y: Math.floor(translate)});

@@ -21,4 +21,11 @@ class Dimension2D {
   }
 }
 
-export {Position2D, Dimension2D};
+class DOMElementRect {
+  constructor(position = new Position2D(), dimension = new Dimension2D()) {
+    this.position = position;
+    this.dimension = dimension;
+  }
+}
+
+export {Position2D, Dimension2D, DOMElementRect};

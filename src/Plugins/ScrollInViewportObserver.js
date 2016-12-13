@@ -10,6 +10,9 @@
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 import DOMHelpers from '../Helpers/DOMHelpers';
+import {Position2D} from '../Helpers/GeometricHelpers';
+
+import DOMElementsCacheProvider from '../Providers/DOMElementsCacheProvider';
 
 class ScrollInViewportObserver extends ScrollProxyObserver {
 
@@ -36,20 +39,23 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   constructor(
     $elements = requiredParameter(),
     {
-      updateMode = ScrollInViewportObserver.UPDATE_MODE.RAF,
+      cache = false,
       trackDirections = false,
       visibleFn = () => {},
       invisibleFn = () => {}
     } = {}) {
     super();
 
-    this.updateMode = updateMode;
+    this.cache = cache;
     this.trackDirections = trackDirections;
     this.visibleFn = visibleFn;
     this.invisibleFn = invisibleFn;
 
     this.$elements = Array.from($elements);
     this.elementsViewportData = [];
+
+    this.scrollOffset = new Position2D();
+    this.prevScrollOffset = new Position2D();
 
     this.init();
   }
@@ -64,13 +70,21 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   };
 
   onScroll(scrollPosition) {
-    this.setScrollPosition(scrollPosition);
-
-    if (this.updateMode === ScrollInViewportObserver.UPDATE_MODE.SCROLL) {
-      this.$elements.forEach((element, index) => {
-        this.updateElementViewportData(element, index);
-      });
+    if (!this.isRunning()) {
+      return;
     }
+
+    if (this.cache) {
+      this.scrollOffset.y = -scrollPosition.y;
+      this.scrollOffset.x = -scrollPosition.x;
+
+      if (this.trackDirections) {
+        this.prevScrollOffset.y = -this.scrollPosition.y;
+        this.prevScrollOffset.x = -this.scrollPosition.x;
+      }
+    }
+
+    this.setScrollPosition(scrollPosition);
   }
 
   updateDOM() {
@@ -79,11 +93,9 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
     }
 
     this.$elements.forEach((element, index) => {
-      if (this.updateMode === ScrollInViewportObserver.UPDATE_MODE.RAF) {
-        this.updateElementViewportData(element, index);
-      }
-
+      this.updateElementViewportData(element, index);
       const updatedInViewportData = this.elementsViewportData[index];
+
       if (updatedInViewportData.isInViewport && !updatedInViewportData.wasInViewport) {
         this.visibleFn(index, element, updatedInViewportData.fromVertical, updatedInViewportData.fromHorizontal);
       } else if (!updatedInViewportData.isInViewport && updatedInViewportData.wasInViewport) {
@@ -93,25 +105,40 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   }
 
   updateElementViewportData(element, index) {
-    let inViewportData = this.elementsViewportData[index],
-      newInViewportData = DOMHelpers.getViewportData(element, this.viewportSize);
+    const previousInViewportData = this.elementsViewportData[index];
+    let inViewportData;
+    if (this.cache) {
+      const elementRect = DOMElementsCacheProvider.getElementCacheRect(element, this.scrollOffset);
+      inViewportData = {
+        rect: elementRect,
+        isInViewport: DOMHelpers.isInViewport(elementRect, this.viewportSize, this.scrollOffset)
+      };
+    } else {
+      inViewportData = DOMHelpers.getViewportData(element, this.viewportSize);
+    }
 
-    if (inViewportData !== undefined) {
-      newInViewportData.wasInViewport = inViewportData.isInViewport;
+    if (previousInViewportData !== undefined) {
+      inViewportData.wasInViewport = previousInViewportData.isInViewport;
 
       if (this.trackDirections) {
-        if (inViewportData.isInViewport && !newInViewportData.isInViewport) {
+        const previousTop = previousInViewportData.rect.position.y + (this.cache ? this.prevScrollOffset.y : 0),
+          top = inViewportData.rect.position.y + (this.cache ? this.scrollOffset.y : 0),
+          previousLeft = previousInViewportData.rect.position.x + (this.cache ? this.prevScrollOffset.x : 0),
+          left = inViewportData.rect.position.x + (this.cache ? this.scrollOffset.x : 0);
+
+        if (previousInViewportData.isInViewport && !inViewportData.isInViewport) {
           // Element has become invisible in viewport
-          newInViewportData.toVertical = inViewportData.rect.top > newInViewportData.rect.top ? ScrollInViewportObserver.IN_VIEWPORT.TO.TOP : ScrollInViewportObserver.IN_VIEWPORT.TO.BOTTOM;
-          newInViewportData.toHorizontal = inViewportData.rect.left > newInViewportData.rect.left ? ScrollInViewportObserver.IN_VIEWPORT.TO.LEFT : ScrollInViewportObserver.IN_VIEWPORT.TO.RIGHT;
-        } else if (!inViewportData.isInViewport && newInViewportData.isInViewport) {
+          inViewportData.toVertical = previousTop > top ? ScrollInViewportObserver.IN_VIEWPORT.TO.TOP : ScrollInViewportObserver.IN_VIEWPORT.TO.BOTTOM;
+          inViewportData.toHorizontal = previousLeft > left ? ScrollInViewportObserver.IN_VIEWPORT.TO.LEFT : ScrollInViewportObserver.IN_VIEWPORT.TO.RIGHT;
+        } else if (!previousInViewportData.isInViewport && inViewportData.isInViewport) {
           // Element has become visible in viewport
-          newInViewportData.fromVertical = inViewportData.rect.top < newInViewportData.rect.top ? ScrollInViewportObserver.IN_VIEWPORT.FROM.TOP : ScrollInViewportObserver.IN_VIEWPORT.FROM.BOTTOM;
-          newInViewportData.fromHorizontal = inViewportData.rect.left < newInViewportData.rect.left ? ScrollInViewportObserver.IN_VIEWPORT.FROM.LEFT : ScrollInViewportObserver.IN_VIEWPORT.FROM.RIGHT;
+          inViewportData.fromVertical = previousTop < top ? ScrollInViewportObserver.IN_VIEWPORT.FROM.TOP : ScrollInViewportObserver.IN_VIEWPORT.FROM.BOTTOM;
+          inViewportData.fromHorizontal = previousLeft < left ? ScrollInViewportObserver.IN_VIEWPORT.FROM.LEFT : ScrollInViewportObserver.IN_VIEWPORT.FROM.RIGHT;
         }
       }
     }
-    this.elementsViewportData[index] = newInViewportData;
+
+    this.elementsViewportData[index] = inViewportData;
   }
 }
 

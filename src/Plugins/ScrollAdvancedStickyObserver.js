@@ -97,7 +97,7 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
       : this.maxStickyTranslate - this.stickyOffsetTop + this.triggerOffset;
 
     // Set width (for fixed state)
-    TweenLite.set(this.stickyElement, {width: this.stickyRect.width, immediateRender: true});
+    this.stickyElement.style.width = this.stickyRect.width + 'px';
 
     this.onScroll(this.scrollPosition);
     this.updateDOM();

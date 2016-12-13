@@ -62,7 +62,7 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
     this.$elements.forEach((element, index) => {
       const inViewportData = DOMHelpers.getViewportData(element, this.viewportSize);
       if (inViewportData.isInViewport) {
-        const percentage = inViewportData.rect.bottom / ( this.viewportSize.height + this.elementsHeights[index] ),
+        const percentage = (inViewportData.rect.position.y + inViewportData.rect.dimension.height) / ( this.viewportSize.height + this.elementsHeights[index] ),
           translate = (percentage - .5) * this.direction * this.maxTranslate;
 
         TweenLite.to(element, .5, {y: translate});
