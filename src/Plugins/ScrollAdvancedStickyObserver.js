@@ -67,18 +67,8 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
     this.reset();
 
     // Set if sticky is needed and if so, which stickySubject will play as the sticky element
-    const stickyCandidateElementARect = this.stickyCandidateElementA.getBoundingClientRect(),
-      stickyCandidateElementBRect = this.stickyCandidateElementB.getBoundingClientRect();
-
-    if (stickyCandidateElementARect.height > stickyCandidateElementBRect.height) {
-      this.stickyElement = this.stickyCandidateElementB;
-      this.stickyRect = stickyCandidateElementBRect;
-    } else {
-      this.stickyElement = this.stickyCandidateElementA;
-      this.stickyRect = stickyCandidateElementARect;
-    }
+    this.promoteStickyCandidates(this.stickyCandidateElementA, this.stickyCandidateElementB);
     this.containerRect = this.containerElement.getBoundingClientRect();
-
     this.stickyIsNeeded = this.stickyRect.height + this.stickyOffsetBottom < this.containerRect.height;
 
     if (!this.stickyIsNeeded) {
@@ -101,6 +91,19 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
     this.onScroll(this.scrollPosition);
     this.updateDOM();
+  }
+
+  promoteStickyCandidates(candidateA, candidateB) {
+    const candidateARect = candidateA.getBoundingClientRect(),
+      candidateBRect = candidateB.getBoundingClientRect();
+
+    if (candidateARect.height > candidateBRect.height) {
+      this.stickyElement = candidateB;
+      this.stickyRect = candidateBRect;
+    } else {
+      this.stickyElement = candidateA;
+      this.stickyRect = candidateARect;
+    }
   }
 
   setOffsets({
@@ -158,21 +161,17 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
       : this.containerRect.top - this.triggerOffset < 0;
 
     if (stickyCondition) {
-      const absContainerOffsetTop = Math.abs(this.containerRect.top - this.triggerOffset),
-        stickyTranslate = absContainerOffsetTop >= this.maxST ? this.maxST : absContainerOffsetTop;
+      const stickyTranslate = Math.min(Math.abs(this.containerRect.top - this.triggerOffset), this.maxST);
 
       if (stickyTranslate === this.maxST) {
         TweenLite.set(this.stickyElement, {position: 'absolute', top: this.maxStickyTranslate, y: '', left: ''});
       } else {
         const top = this.stickyExceedsViewport
           ? Math.floor(
-          Math.min(
-            Math.max(
-              this.stickyRect.top + this.latestKnownScrollYDelta,
-              -this.maxStickyInnerTranslateY
-            ),
-            this.stickyInnerOffsetTop
-          ))
+            Math.min(
+              Math.max(this.stickyRect.top + this.latestKnownScrollYDelta, -this.maxStickyInnerTranslateY),
+              this.stickyInnerOffsetTop
+            ))
           : this.stickyOffsetTop;
         TweenLite.set(this.stickyElement, {position: 'fixed', top: 0, y: top, left: this.stickyRect.left});
       }
