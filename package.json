@@ -1,10 +1,6 @@
 {
   "name": "foes-scrollproxy",
-<<<<<<< 7a35ab248c45f04cb74a217d89d648b3538da957
-  "version": "0.5.0",
-=======
   "version": "0.5.1",
->>>>>>> Conflicts solved.
   "license": "MIT",
   "description": "",
   "keywords": [
