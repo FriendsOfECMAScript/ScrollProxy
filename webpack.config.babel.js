@@ -26,10 +26,8 @@ export default (options) => {
       path: join(__dirname, 'dist'),
       libraryTarget: isUmd(options) ? 'window' : 'commonjs'
     },
-    resolve: {
-      alias: {
-        TweenLite: join(__dirname, 'node_modules/gsap/src/uncompressed/TweenLite.js')
-      }
+    externals: {
+      'TweenLite': 'TweenLite'
     },
     devtool: 'source-map',
     module: {

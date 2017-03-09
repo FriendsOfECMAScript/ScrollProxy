@@ -10,8 +10,7 @@
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 
-import TweenLite from 'gsap/src/uncompressed/TweenLite';
-import CSSPlugin from 'gsap/src/uncompressed/plugins/CSSPlugin';
+import TweenLite from 'TweenLite';
 
 class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
@@ -167,7 +166,7 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
         TweenLite.set(this.stickyElement, {position: 'absolute', top: this.maxStickyTranslate, y: '', left: ''});
       } else {
         const top = this.stickyExceedsViewport
-          ? Math.floor(
+          ? Math.round(
             Math.min(
               Math.max(this.stickyRect.top + this.latestKnownScrollYDelta, -this.maxStickyInnerTranslateY),
               this.stickyInnerOffsetTop

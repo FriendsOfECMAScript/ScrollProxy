@@ -11,8 +11,7 @@ import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 import DOMHelpers from '../Helpers/DOMHelpers';
 
-import TweenLite from 'gsap/src/uncompressed/TweenLite';
-import CSSPlugin from 'gsap/src/uncompressed/plugins/CSSPlugin';
+import TweenLite from 'TweenLite';
 
 class ScrollImageParallaxObserver extends ScrollProxyObserver {
 
@@ -71,7 +70,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
           percentage = (inViewportData.rect.position.y + inViewportData.rect.dimension.height) / ( this.viewportSize.height + this.imagesHeights[index] ),
           translate = (percentage - .5) * this.direction * maxTranslate;
 
-        TweenLite.to(image, .5, {y: Math.floor(translate)});
+        TweenLite.to(image, .5, {y: Math.round(translate)});
       }
     });
   }
