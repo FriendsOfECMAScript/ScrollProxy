@@ -88,6 +88,8 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
     // Set width (for fixed state)
     this.stickyElement.style.width = this.stickyRect.width + 'px';
 
+    this.containerOffsetTop = this.containerElement.offsetTop;
+
     this.onScroll(this.scrollPosition);
     this.updateDOM();
   }
@@ -138,8 +140,9 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
     this.setScrollPosition(scrollPosition);
 
-    this.stickyRect = this.stickyElement.getBoundingClientRect();
-    this.containerRect = this.containerElement.getBoundingClientRect();
+//     this.stickyRect = this.stickyElement.getBoundingClientRect();
+//     this.containerRect = this.containerElement.getBoundingClientRect();
+    this.containerTop = this.scrollPosition.y - this.containerOffsetTop;
 
     if (this.stickyExceedsViewport) {
       this.scrollDirection = this.latestKnownScrollY > this.scrollPosition.y
@@ -155,28 +158,38 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
       return;
     }
 
-    const stickyCondition = this.stickyExceedsViewport
-      ? this.containerRect.top - this.triggerOffset + (this.stickyOffsetTop - this.stickyInnerOffsetTop) < 0
-      : this.containerRect.top - this.triggerOffset < 0;
+//     var stickyConditionMet = this.containerRect.top < 0 && Math.abs(this.containerRect.top) < this.maxStickyTranslate;
 
-    if (stickyCondition) {
-      const stickyTranslate = Math.min(Math.abs(this.containerRect.top - this.triggerOffset), this.maxST);
+//     console.log(this.maxStickyTranslate);
+    //  + this.triggerOffset + this.stickyOffsetTop
 
-      if (stickyTranslate === this.maxST) {
-        TweenLite.set(this.stickyElement, {position: 'absolute', top: this.maxStickyTranslate, y: '', left: ''});
-      } else {
-        const top = this.stickyExceedsViewport
-          ? Math.round(
-            Math.min(
-              Math.max(this.stickyRect.top + this.latestKnownScrollYDelta, -this.maxStickyInnerTranslateY),
-              this.stickyInnerOffsetTop
-            ))
-          : this.stickyOffsetTop;
-        TweenLite.set(this.stickyElement, {position: 'fixed', top: 0, y: top, left: this.stickyRect.left});
-      }
-    } else {
-      TweenLite.set(this.stickyElement, {clearProps: 'position, top, y, left'});
-    }
+    const top = Math.max(0, Math.min(this.containerTop, this.maxStickyTranslate));
+    TweenLite.set(this.stickyElement, { position: 'absolute', y: top });
+
+
+//     const stickyCondition = this.stickyExceedsViewport
+//       ? this.containerRect.top - this.triggerOffset + (this.stickyOffsetTop - this.stickyInnerOffsetTop) < 0
+//       : this.containerRect.top - this.triggerOffset < 0;
+//
+//     if (stickyCondition) {
+//       const stickyTranslate = Math.min(Math.abs(this.containerRect.top - this.triggerOffset), this.maxST);
+//
+//       if (stickyTranslate === this.maxST) {
+//         TweenLite.set(this.stickyElement, {position: 'absolute', top: this.maxStickyTranslate, y: '', left: ''});
+//       } else {
+//         console.log(this.stickyRect.top, this.latestKnownScrollYDelta, this.maxStickyInnerTranslateY, this.stickyInnerOffsetTop);
+//
+//         const top = this.stickyExceedsViewport
+//           ? Math.min(
+//               Math.max(this.stickyRect.top + this.latestKnownScrollYDelta, -this.maxStickyInnerTranslateY),
+//               this.stickyInnerOffsetTop
+//             )
+//           : this.stickyOffsetTop;
+//         TweenLite.set(this.stickyElement, {position: 'fixed', top: 0, y: top, left: this.stickyRect.left});
+//       }
+//     } else {
+//       TweenLite.set(this.stickyElement, {clearProps: 'position, top, y, left'});
+//     }
   }
 
   onResize(viewportSize) {
