@@ -11,6 +11,11 @@ import DOMHelpers from '../Helpers/DOMHelpers';
 import ScrollProxyObserver from './ScrollProxyObserver';
 import debounce from 'lodash.debounce';
 
+let _uuid = 0;
+const getNextUuid = () => {
+  return _uuid++;
+};
+
 class ScrollProxy {
 
   constructor() {
@@ -55,7 +60,7 @@ class ScrollProxy {
       throw new TypeError('Provided object must inherit from ScrollProxyObserver abstract class.');
     }
 
-    const uuid = Symbol();
+    const uuid = getNextUuid();
     this.observers.set(uuid, observer);
     return uuid;
   };
