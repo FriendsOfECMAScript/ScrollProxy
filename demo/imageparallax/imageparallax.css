@@ -1,0 +1,32 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: #f1f1f1;
+    color: #222;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+.parallax-wrapper {
+    background-color: #fff;
+    margin: 100px auto;
+    max-width: 90%;
+    min-height: 100vh;
+    overflow: hidden;
+    width: 640px;
+}
+
+.image-wrapper {
+    height: 300px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.image-parallax {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+}
+

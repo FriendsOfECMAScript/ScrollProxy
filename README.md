@@ -18,6 +18,36 @@ $ bower install --save foes-scrollproxy
 ```
 
 
+Standalone
+```html
+<script type="text/javascript" src="../node_modules/gsap/src/uncompressed/plugins/CSSPlugin.js"></script>
+<script type="text/javascript" src="../node_modules/gsap/src/uncompressed/TweenLite.js"></script>
+<script type="text/javascript" src="../../dist/foes-scrollproxy.umd.js"></script>
+```
+Gulp
+```javascript
+// ...
+browserify('./entry.js')
+    .require('./node_modules/gsap/src/uncompressed/TweenLite.js', {expose: '../TweenLite.js'})
+// ...
+```
+
+Webpack
+```js
+// ...
+resolve: {
+  alias: {
+    'TweenLite': 'gsap/TweenLite'
+  }
+}
+// ...
+```
+
+
+
+
+
+
 After installation process, you have to include the js files in your html.
 ```html
 <script src="/your/path/foes-scrollproxy/dist/foes-scrollproxy.umd.min.js"></script>

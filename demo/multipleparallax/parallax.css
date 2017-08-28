@@ -1,0 +1,44 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: #f1f1f1;
+    color: #222;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+.parallax-wrapper {
+    background-color: #fff;
+    margin: 100px auto;
+    max-width: 90%;
+    min-height: 100vh;
+    overflow: hidden;
+    width: 640px;
+}
+
+.image-wrapper {
+    height: 300px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+}
+
+.image-parallax {
+    height: 100%;
+    object-fit: cover;
+    width: 100%;
+    z-index: 0;
+}
+
+.image-title {
+    color: #f9f9f9;
+    font-size: 28px;
+    font-weight: 400;
+    left: 45px;
+    position: absolute;
+    text-shadow: 0 1px 4px rgba(0, 0, 0, .5);
+    top: 80px;
+    z-index: 10;
+}

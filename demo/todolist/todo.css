@@ -1,0 +1,52 @@
+* {
+    box-sizing: border-box;
+}
+body {
+    background-color: #f1f1f1;
+    color: #222;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    margin: 0;
+    padding: 0;
+}
+.todo-list {
+    background-color: #fff;
+    border: 1px solid orangered;
+    border-radius: 3px;
+    margin: 100px auto;
+    max-width: 90%;
+    overflow: hidden;
+    width: 440px;
+}
+.sticky-header__wrapper {
+    height: 30px;
+    position: relative;
+}
+.sticky-header {
+    background-color: orangered;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 15px;
+    position: absolute;
+    text-transform: uppercase;
+    width: 100%;
+}
+.todo {
+    border-bottom: 1px solid #eee;
+    padding: 10px 15px;
+}
+.todo--last {
+    border-bottom: 0;
+}
+.todo__title{
+    font-size: 20px;
+    font-weight: 500;
+    margin: 4px 0 0;
+}
+.todo__description {
+    color: #999;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 8px 0;
+}
