@@ -1,6 +1,6 @@
 {
-  "name": "foes-scrollproxy",
-  "version": "0.7.0",
+  "name": "foes-scrollproxy-demo",
+  "version": "0.1.0",
   "license": "MIT",
   "scripts": {
     "build": "webpack --output-filename foes-scrollproxy.umd.js"
