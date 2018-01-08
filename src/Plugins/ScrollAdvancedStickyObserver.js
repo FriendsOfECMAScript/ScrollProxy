@@ -10,7 +10,8 @@
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 
-import TweenLite from 'TweenLite';
+import {TweenLite} from 'gsap/TweenLite';
+import 'gsap/CSSPlugin';
 
 class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 

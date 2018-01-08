@@ -9,7 +9,7 @@
     <script type="text/javascript" src="../node_modules/gsap/src/uncompressed/plugins/CSSPlugin.js"></script>
     <script type="text/javascript" src="../node_modules/gsap/src/uncompressed/easing/EasePack.js"></script>
     <script type="text/javascript" src="../node_modules/gsap/src/uncompressed/TweenLite.js"></script>
-    <script type="text/javascript" src="../../dist/foes-scrollproxy.umd.js"></script>
+    <script type="text/javascript" src="../shared/dist/foes-scrollproxy.umd.js"></script>
 
     <link rel="stylesheet" href="inviewport.css"/>
     <script src="inviewport.js"></script>

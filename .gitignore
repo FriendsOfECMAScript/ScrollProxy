@@ -9,4 +9,4 @@
 /dist
 /node_modules
 /npm-debug.log
-/demo/node_modules
+/demo/shared/node_modules

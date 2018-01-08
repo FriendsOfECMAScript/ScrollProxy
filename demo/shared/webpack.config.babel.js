@@ -7,27 +7,14 @@
  * file that was distributed with this source code.
  */
 
-'use strict';
-
 import {join} from 'path';
-
-const include = join(__dirname, 'src');
-
-const isUmd = (options) => {
-  return typeof options !== 'undefined'
-    && typeof options.libraryTarget !== 'undefined'
-    && options.libraryTarget === 'umd';
-};
 
 export default (options) => {
   return {
-    entry: './src/index',
+    entry: './src/app.js',
     output: {
       path: join(__dirname, 'dist'),
-      libraryTarget: isUmd(options) ? 'window' : 'commonjs'
-    },
-    externals: {
-      'TweenLite': 'TweenLite'
+      libraryTarget: 'window'
     },
     devtool: 'source-map',
     module: {
@@ -35,7 +22,10 @@ export default (options) => {
         {
           test: /\.js$/,
           loader: 'babel-loader',
-          include: include
+          include: [
+            join(__dirname, 'src'),
+            join(__dirname, 'node_modules/foes-scrollproxy')
+          ]
         }
       ]
     }

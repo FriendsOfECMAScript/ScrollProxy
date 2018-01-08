@@ -11,7 +11,8 @@ import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 import DOMHelpers from '../Helpers/DOMHelpers';
 
-import TweenLite from 'TweenLite';
+import {TweenLite} from 'gsap/TweenLite';
+import 'gsap/CSSPlugin';
 
 class ScrollImageParallaxObserver extends ScrollProxyObserver {
 
