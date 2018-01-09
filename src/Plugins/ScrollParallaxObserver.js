@@ -19,7 +19,7 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
   };
 
   constructor(
-    $elements = requiredParameter(),
+    elements = requiredParameter(),
     {
       direction = ScrollParallaxObserver.DIRECTION.NEGATIVE,
       maxTranslate = 200
@@ -29,7 +29,7 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
     this.direction = direction;
     this.maxTranslate = maxTranslate;
 
-    this.elements = Array.from($elements);
+    this.elements = Array.from(elements);
     this.elementsHeights = [];
 
     this.init();

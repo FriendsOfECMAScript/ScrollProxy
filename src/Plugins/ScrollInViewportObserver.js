@@ -37,7 +37,7 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   };
 
   constructor(
-    $elements = requiredParameter(),
+    elements = requiredParameter(),
     {
       cache = false,
       trackDirections = false,
@@ -51,7 +51,7 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
     this.visibleFn = visibleFn;
     this.invisibleFn = invisibleFn;
 
-    this.$elements = Array.from($elements);
+    this.elements = Array.from(elements);
     this.elementsViewportData = [];
 
     this.scrollOffset = new Position2D();
@@ -66,7 +66,7 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
   }
 
   addElements($elements) {
-    this.$elements.push(...$elements);
+    this.elements.push(...$elements);
   };
 
   onScroll(scrollPosition) {
@@ -92,7 +92,7 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
       return;
     }
 
-    this.$elements.forEach((element, index) => {
+    this.elements.forEach((element, index) => {
       this.updateElementViewportData(element, index);
       const updatedInViewportData = this.elementsViewportData[index];
 

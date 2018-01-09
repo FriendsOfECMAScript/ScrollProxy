@@ -19,7 +19,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
   };
 
   constructor(
-    $images = requiredParameter(),
+    images = requiredParameter(),
     {
       scale = 1.2,
       direction = ScrollImageParallaxObserver.DIRECTION.NEGATIVE,
@@ -32,7 +32,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
     this.direction = direction;
     this.scale = scale;
 
-    this.$images = Array.from($images);
+    this.images = Array.from(images);
     this.imagesHeights = [];
 
     this.init();
@@ -41,7 +41,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
   init() {
     this.reset();
 
-    this.$images.forEach((image, index) => {
+    this.images.forEach((image, index) => {
       const h = image.offsetHeight;
       this.imagesHeights[index] = h;
 
@@ -67,7 +67,7 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
       return;
     }
 
-    this.$images.forEach((image, index) => {
+    this.images.forEach((image, index) => {
       const inViewportData = DomHelpers.getViewportData(image.parentNode, this.viewportSize);
       if (inViewportData.isInViewport) {
         const maxTranslate = (this.scale - 1) * this.imagesHeights[index],
