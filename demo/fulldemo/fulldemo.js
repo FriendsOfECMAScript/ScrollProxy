@@ -18,7 +18,8 @@
           section,
           { triggerOffset: 30,
             stickyOffsetTop: 30, stickyOffsetBottom: 0,
-            stickyInnerOffsetTop: 30, stickyInnerOffsetBottom: 30 }
+            stickyInnerOffsetTop: 30, stickyInnerOffsetBottom: 30
+          }
         );
       }
 
@@ -39,12 +40,10 @@
       ////// GALLERY IMAGES EFFECT //////
       new ScrollInViewportObserver(galleryImages, {
         visibleFn: function (index, element) {
-          var t = new TimelineLite();
-          t.to(element, 2, {opacity: 1}, 0);
-          t.to(element, 8, {scale: '+='+.2, rotation: Math.random() + 1, force3D: true}, 0);
+          TweenLite.to(element, 2, {opacity: 1});
         },
         invisibleFn: function (index, element) {
-          TweenLite.to(element, 1, {opacity: .6, scale: 1, rotation: 0});
+          TweenLite.to(element, 1, {opacity: .6});
         }
       });
 

@@ -61,8 +61,5 @@
     "npm-run-all": "^3.1.0",
     "rimraf": "^2.5.4",
     "webpack": "^2.2.1"
-  },
-  "peerDependencies": {
-    "gsap": "^1.20.3"
   }
 }

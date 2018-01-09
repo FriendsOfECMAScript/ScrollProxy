@@ -9,10 +9,7 @@
 
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
-import DOMHelpers from '../Helpers/DOMHelpers';
-
-import {TweenLite} from 'gsap/TweenLite';
-import 'gsap/CSSPlugin';
+import DomHelpers from '../Helpers/DomHelpers';
 
 class ScrollParallaxObserver extends ScrollProxyObserver {
 
@@ -32,7 +29,7 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
     this.direction = direction;
     this.maxTranslate = maxTranslate;
 
-    this.$elements = Array.from($elements);
+    this.elements = Array.from($elements);
     this.elementsHeights = [];
 
     this.init();
@@ -41,7 +38,7 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
   init() {
     this.reset();
 
-    this.$elements.forEach((element, index) => {
+    this.elements.forEach((element, index) => {
       this.elementsHeights[index] = element.offsetHeight;
     });
 
@@ -50,8 +47,9 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
   }
 
   reset() {
-    TweenLite.killTweensOf(this.$elements);
-    TweenLite.set(this.$elements, {clearProps: 'all'});
+    this.elements.forEach(element => {
+      element.style.transform = 'none';
+    });
   }
 
   updateDOM() {
@@ -59,13 +57,13 @@ class ScrollParallaxObserver extends ScrollProxyObserver {
       return;
     }
 
-    this.$elements.forEach((element, index) => {
-      const inViewportData = DOMHelpers.getViewportData(element, this.viewportSize);
+    this.elements.forEach((element, index) => {
+      const inViewportData = DomHelpers.getViewportData(element, this.viewportSize);
       if (inViewportData.isInViewport) {
         const percentage = (inViewportData.rect.position.y + inViewportData.rect.dimension.height) / ( this.viewportSize.height + this.elementsHeights[index] ),
           translate = (percentage - .5) * this.direction * this.maxTranslate;
 
-        TweenLite.to(element, .5, {y: translate});
+        DomHelpers.setTransform(element, {y: translate});
       }
     });
   }

@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import DOMHelpers from '../Helpers/DOMHelpers';
+import DomHelpers from '../Helpers/DomHelpers';
 import ScrollProxy from './ScrollProxy';
 
 class ScrollProxyObserver {
@@ -24,8 +24,8 @@ class ScrollProxyObserver {
     }
 
     this.state = ScrollProxyObserver.STATE.RUNNING;
-    this.scrollPosition = DOMHelpers.getScrollPosition();
-    this.viewportSize = DOMHelpers.getViewportSize();
+    this.scrollPosition = DomHelpers.getScrollPosition();
+    this.viewportSize = DomHelpers.getViewportSize();
     // Add self as observer
     this.uuid = ScrollProxy.addObserver(this);
 

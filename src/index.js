@@ -1,5 +1,5 @@
 import * as GeometricHelpers from './Helpers/GeometricHelpers';
-import DOMHelpers from './Helpers/DOMHelpers';
+import DomHelpers from './Helpers/DomHelpers';
 import ScrollProxyObserver from './Core/ScrollProxyObserver';
 
 import ScrollParallaxObserver from './Plugins/ScrollParallaxObserver'
@@ -11,7 +11,7 @@ import ScrollDirectionObserver from './Plugins/ScrollDirectionObserver';
 
 export {
   GeometricHelpers,
-  DOMHelpers,
+  DomHelpers,
   ScrollProxyObserver,
   ScrollParallaxObserver,
   ScrollImageParallaxObserver,

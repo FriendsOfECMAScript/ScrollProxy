@@ -7,11 +7,9 @@
  * file that was distributed with this source code.
  */
 
-import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
-import ScrollProxyObserver from '../Core/ScrollProxyObserver';
-
-import {TweenLite} from 'gsap/TweenLite';
-import 'gsap/CSSPlugin';
+import {requiredParameter} from './../Helpers/ECMAScriptHelpers';
+import ScrollProxyObserver from './../Core/ScrollProxyObserver';
+import DomHelpers from './../Helpers/DomHelpers';
 
 class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
@@ -87,7 +85,7 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
       : this.maxStickyTranslate - this.stickyOffsetTop + this.triggerOffset;
 
     // Set width (for fixed state)
-    this.stickyElement.style.width = this.stickyRect.width + 'px';
+    this.stickyElement.style.width = `${this.stickyRect.width}px`;
 
     this.onScroll(this.scrollPosition);
     this.updateDOM();
@@ -123,8 +121,11 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
 
   reset() {
     if (this.stickyElement !== null) {
-      TweenLite.killTweensOf(this.stickyElement);
-      TweenLite.set(this.stickyElement, {clearProps: 'all', immediateRender: true});
+      this.stickyElement.style.width = 'auto';
+      this.stickyElement.style.position = 'relative';
+      this.stickyElement.style.left = 'auto';
+      this.stickyElement.style.top = '0px';
+      this.stickyElement.style.transform = 'none';
     }
   }
 
@@ -164,7 +165,10 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
       const stickyTranslate = Math.min(Math.abs(this.containerRect.top - this.triggerOffset), this.maxST);
 
       if (stickyTranslate === this.maxST) {
-        TweenLite.set(this.stickyElement, {position: 'absolute', top: this.maxStickyTranslate, y: '', left: ''});
+        this.stickyElement.style.position = 'absolute';
+        this.stickyElement.style.top = `${this.maxStickyTranslate}px`;
+        this.stickyElement.style.left = 'auto';
+        this.stickyElement.style.transform = 'none';
       } else {
         const top = this.stickyExceedsViewport
           ? Math.round(
@@ -173,23 +177,28 @@ class ScrollAdvancedStickyObserver extends ScrollProxyObserver {
               this.stickyInnerOffsetTop
             ))
           : this.stickyOffsetTop;
-        TweenLite.set(this.stickyElement, {position: 'fixed', top: 0, y: top, left: this.stickyRect.left});
+
+        this.stickyElement.style.position = 'fixed';
+        this.stickyElement.style.top = '0px';
+        this.stickyElement.style.left = `${this.stickyRect.left}px`;
+        DomHelpers.setTransform(this.stickyElement, {y: top});
       }
     } else {
-      TweenLite.set(this.stickyElement, {clearProps: 'position, top, y, left'});
+      this.stickyElement.style.position = 'relative';
+      this.stickyElement.style.top = '0px';
+      this.stickyElement.style.left = 'auto';
+      this.stickyElement.style.transform = 'none';
     }
   }
 
   onResize(viewportSize) {
     super.onResize(viewportSize);
-
-    TweenLite.set(this.stickyElement, {clearProps: 'width', immediateRender: true});
+    this.reset();
     this.init();
   }
 
   destroy() {
     super.destroy();
-
     this.reset();
   }
 }

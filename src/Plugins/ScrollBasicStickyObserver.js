@@ -10,9 +10,6 @@
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
 
-import {TweenLite} from 'gsap/TweenLite';
-import 'gsap/CSSPlugin';
-
 class ScrollBasicStickyObserver extends ScrollProxyObserver {
 
   constructor(
@@ -49,15 +46,17 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
     this.maxStickyTranslate = Math.max(this.containerRect.height - this.stickyRect.height - this.stickyTopOffset - this.stickyBottomOffset, 0);
 
     // Set width (for fixed state)
-    TweenLite.set(this.stickyElement, {width: this.stickyRect.width, immediateRender: true});
+    this.stickyElement.style.width = `${this.stickyRect.width}px`;
 
     this.onScroll(this.scrollPosition);
     this.updateDOM();
   };
 
   reset() {
-    TweenLite.killTweensOf(this.stickyElement);
-    TweenLite.set(this.stickyElement, {clearProps: 'all', immediateRender: true});
+    this.stickyElement.style.width = 'auto';
+    this.stickyElement.style.position = 'relative';
+    this.stickyElement.style.left = 'auto';
+    this.stickyElement.style.top = '0px';
   };
 
   updateDOM() {
@@ -71,20 +70,18 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
       let absContainerOffsetTop = Math.abs(this.containerRect.top);
       stickyTranslate = absContainerOffsetTop >= this.maxStickyTranslate ? this.maxStickyTranslate : absContainerOffsetTop;
       if (stickyTranslate === this.maxStickyTranslate) {
-        TweenLite.set(this.stickyElement, {
-          position: 'absolute',
-          top: this.maxStickyTranslate + this.stickyTopOffset,
-          left: ''
-        });
+        this.stickyElement.style.position = 'absolute';
+        this.stickyElement.style.top = `${this.maxStickyTranslate + this.stickyTopOffset}px`;
+        this.stickyElement.style.left = 'auto';
       } else {
-        TweenLite.set(this.stickyElement, {
-          position: 'fixed',
-          top: this.stickyTopOffset,
-          left: this.stickyRect.left
-        });
+        this.stickyElement.style.position = 'fixed';
+        this.stickyElement.style.top = `${this.stickyTopOffset}px`;
+        this.stickyElement.style.left = `${this.stickyRect.left}px`;
       }
     } else {
-      TweenLite.set(this.stickyElement, {clearProps: 'position, top, left'});
+      this.stickyElement.style.position = 'relative';
+      this.stickyElement.style.top = '0px';
+      this.stickyElement.style.left = 'auto';
     }
   }
 
@@ -96,8 +93,7 @@ class ScrollBasicStickyObserver extends ScrollProxyObserver {
 
   onResize(viewportSize) {
     super.onResize(viewportSize);
-
-    TweenLite.set(this.stickyElement, {clearProps: 'width', immediateRender: true});
+    this.reset();
     this.init();
   }
 

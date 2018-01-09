@@ -9,7 +9,7 @@
 
 import {Position2D, Dimension2D, DOMElementRect} from './GeometricHelpers';
 
-class DOMHelpers {
+class DomHelpers {
 
   static getDocumentHeight() {
     const body = document.body,
@@ -34,7 +34,7 @@ class DOMHelpers {
     const rect = element.getBoundingClientRect(),
       elementRect = new DOMElementRect(new Position2D(rect.left, rect.top), new Dimension2D(rect.height, rect.width));
     return {
-      isInViewport: DOMHelpers.isInViewport(elementRect, viewportSize),
+      isInViewport: DomHelpers.isInViewport(elementRect, viewportSize),
       rect: elementRect
     };
   }
@@ -56,6 +56,30 @@ class DOMHelpers {
   static getScrollPosition() {
     return new Position2D(window.pageXOffset, window.pageYOffset);
   }
+
+  static getTransformPropertyName = () => {
+    if (DomHelpers.transformPropertyName === undefined) {
+      const testEl = document.createElement('div');
+
+      if (testEl.style.transform === null) {
+        const vendors = ['Webkit', 'Moz', 'ms'];
+
+        for (let vendor in vendors) {
+          if(testEl.style[`${vendors[vendor]}Transform`] !== undefined) {
+            return `${vendors[vendor]}Transform`;
+          }
+        }
+      }
+
+      DomHelpers.transformPropertyName = 'transform';
+    }
+
+    return DomHelpers.transformPropertyName;
+  };
+
+  static setTransform(domNode, {scale = 1, x = 0, y = 0}) {
+    domNode.style[DomHelpers.getTransformPropertyName()] = `scale(${scale}) translateX(${x}px)  translateY(${y}px)`;
+  }
 }
 
-export default DOMHelpers;
+export default DomHelpers;

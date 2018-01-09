@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 
-import DOMHelpers from '../Helpers/DOMHelpers';
+import DomHelpers from '../Helpers/DomHelpers';
 import ScrollProxyObserver from './ScrollProxyObserver';
 import debounce from 'lodash.debounce';
 
@@ -23,13 +23,13 @@ class ScrollProxy {
     this.isUpdatingDOM = false;
 
     this.onScroll = () => {
-      const scrollPosition = DOMHelpers.getScrollPosition();
+      const scrollPosition = DomHelpers.getScrollPosition();
       this.notifyObservers('onScroll', scrollPosition);
       this.requestDOMUpdate();
     };
 
     this.onResize = () => {
-      const viewportSize = DOMHelpers.getViewportSize();
+      const viewportSize = DomHelpers.getViewportSize();
       this.notifyObservers('onResize', viewportSize);
     };
 

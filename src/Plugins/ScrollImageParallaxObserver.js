@@ -9,10 +9,7 @@
 
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
-import DOMHelpers from '../Helpers/DOMHelpers';
-
-import {TweenLite} from 'gsap/TweenLite';
-import 'gsap/CSSPlugin';
+import DomHelpers from '../Helpers/DomHelpers';
 
 class ScrollImageParallaxObserver extends ScrollProxyObserver {
 
@@ -47,7 +44,8 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
     this.$images.forEach((image, index) => {
       const h = image.offsetHeight;
       this.imagesHeights[index] = h;
-      TweenLite.set(image, {scale: this.scale, y: this.direction * (this.scale - 1) * h / 2});
+
+      DomHelpers.setTransform(image, {scale: this.scale, y: this.direction * (this.scale - 1) * h / 2});
     });
 
     this.onScroll(this.scrollPosition);
@@ -55,8 +53,13 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
   }
 
   reset() {
-    TweenLite.killTweensOf(this.$images);
-    TweenLite.set(this.$images, {clearProps: 'all'});
+    if (this.images === undefined) {
+      return;
+    }
+
+    this.images.forEach(image => {
+      image.style.transform = 'none';
+    });
   }
 
   updateDOM() {
@@ -65,13 +68,13 @@ class ScrollImageParallaxObserver extends ScrollProxyObserver {
     }
 
     this.$images.forEach((image, index) => {
-      const inViewportData = DOMHelpers.getViewportData(image.parentNode, this.viewportSize);
+      const inViewportData = DomHelpers.getViewportData(image.parentNode, this.viewportSize);
       if (inViewportData.isInViewport) {
         const maxTranslate = (this.scale - 1) * this.imagesHeights[index],
           percentage = (inViewportData.rect.position.y + inViewportData.rect.dimension.height) / ( this.viewportSize.height + this.imagesHeights[index] ),
           translate = (percentage - .5) * this.direction * maxTranslate;
 
-        TweenLite.to(image, .5, {y: Math.round(translate)});
+        DomHelpers.setTransform(image, {scale: this.scale, y: Math.round(translate)});
       }
     });
   }

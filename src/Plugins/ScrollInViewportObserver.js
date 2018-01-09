@@ -9,7 +9,7 @@
 
 import {requiredParameter} from '../Helpers/ECMAScriptHelpers';
 import ScrollProxyObserver from '../Core/ScrollProxyObserver';
-import DOMHelpers from '../Helpers/DOMHelpers';
+import DomHelpers from '../Helpers/DomHelpers';
 import {Position2D} from '../Helpers/GeometricHelpers';
 
 import DOMElementsCacheProvider from '../Providers/DOMElementsCacheProvider';
@@ -111,10 +111,10 @@ class ScrollInViewportObserver extends ScrollProxyObserver {
       const elementRect = DOMElementsCacheProvider.getElementCacheRect(element, this.scrollOffset);
       inViewportData = {
         rect: elementRect,
-        isInViewport: DOMHelpers.isInViewport(elementRect, this.viewportSize, this.scrollOffset)
+        isInViewport: DomHelpers.isInViewport(elementRect, this.viewportSize, this.scrollOffset)
       };
     } else {
-      inViewportData = DOMHelpers.getViewportData(element, this.viewportSize);
+      inViewportData = DomHelpers.getViewportData(element, this.viewportSize);
     }
 
     if (previousInViewportData !== undefined) {
